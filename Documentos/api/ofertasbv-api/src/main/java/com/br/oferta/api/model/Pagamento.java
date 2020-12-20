@@ -5,18 +5,20 @@
  */
 package com.br.oferta.api.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
@@ -56,11 +58,10 @@ public class Pagamento implements Serializable {
     @Column(name = "pagamento_forma", nullable = false)
     private PagamentoForma pagamentoForma = PagamentoForma.BOLETO_BANCARIO;
 
-    @JsonIgnore
-    @OneToOne(mappedBy = "estoque")
-    private Produto produto;
+    @OneToMany(mappedBy = "pagamento", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Fatura> faturas;
 
-     public Long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -100,14 +101,13 @@ public class Pagamento implements Serializable {
         this.pagamentoForma = pagamentoForma;
     }
 
-    public Produto getProduto() {
-        return produto;
+    public List<Fatura> getFaturas() {
+        return faturas;
     }
 
-    public void setProduto(Produto produto) {
-        this.produto = produto;
+    public void setFaturas(List<Fatura> faturas) {
+        this.faturas = faturas;
     }
-
 
     @Override
     public int hashCode() {
@@ -139,5 +139,4 @@ public class Pagamento implements Serializable {
         return true;
     }
 
-   
 }

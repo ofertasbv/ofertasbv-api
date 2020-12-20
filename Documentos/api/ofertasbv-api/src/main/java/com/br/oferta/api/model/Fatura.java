@@ -75,7 +75,7 @@ public class Fatura implements Serializable {
     @Column(name = "fatura_status", nullable = false)
     private FaturaStatus faturaStatus = FaturaStatus.CANCELADA;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "pagamento_id", foreignKey = @ForeignKey(name = "fk_fatura_pagamento"), nullable = false)
     private Pagamento pagamento;
 

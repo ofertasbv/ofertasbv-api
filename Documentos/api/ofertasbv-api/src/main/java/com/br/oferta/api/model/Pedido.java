@@ -26,6 +26,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -62,7 +63,7 @@ public class Pedido implements Serializable {
 
     @NotNull(message = "O valor total é obrigatório")
     @Column(name = "valor_total", nullable = false, precision = 10, scale = 2)
-    private final BigDecimal valorTotal = BigDecimal.ZERO;
+    private BigDecimal valorTotal = BigDecimal.ZERO;
 
 //    @JsonIgnoreProperties({"produto"})
     @OneToMany(mappedBy = "pedido", fetch = FetchType.LAZY)
@@ -78,7 +79,7 @@ public class Pedido implements Serializable {
     @JoinColumn(name = "loja_id", nullable = false, foreignKey = @ForeignKey(name = "fk_pedido_loja"))
     private Loja loja;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "pagamento_id", nullable = false, foreignKey = @ForeignKey(name = "fk_pedido_pagamento"))
     private Pagamento pagamento = new Pagamento();
 
@@ -86,47 +87,41 @@ public class Pedido implements Serializable {
     @Column(name = "pedido_status", nullable = false)
     private PedidoStatus pedidoStatus = PedidoStatus.CANCELADA;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(name = "pagamento_forma", nullable = false)
-    private PagamentoForma pagamentoForma = PagamentoForma.BOLETO_BANCARIO;
-
-    public void adicionarItens(List<PedidoItem> itens) {
-        this.setPedidoItems(itens);
-        this.getPedidoItems().forEach(i -> i.setPedido(this));
-    }
-
-    public BigDecimal getValorTotalItens() {
-        return getPedidoItems().stream()
-                .map(PedidoItem::getValorTotal)
-                .reduce(BigDecimal::add)
-                .orElse(BigDecimal.ZERO);
-    }
-
-    public void calcularValorTotal() {
-        this.setValorTotal(calcularValorTotal(getValorTotalItens(), getValorFrete(), getValorDesconto()));
-    }
-
-    public Long getDiasCriacao() {
-        LocalDate inicio = getDataRegistro() != null ? getDataRegistro().toLocalDate() : LocalDate.now();
-        return ChronoUnit.DAYS.between(inicio, LocalDate.now());
-    }
-
-    public boolean isSalvarPermitido() {
-        return !pedidoStatus.equals(PedidoStatus.CANCELADA);
-    }
-
-    public boolean isSalvarProibido() {
-        return !isSalvarPermitido();
-    }
-
-    private BigDecimal calcularValorTotal(BigDecimal valorTotalItens, BigDecimal valorFrete, BigDecimal valorDesconto) {
-        BigDecimal total = valorTotalItens
-                .add(Optional.ofNullable(valorFrete).orElse(BigDecimal.ZERO))
-                .subtract(Optional.ofNullable(valorDesconto).orElse(BigDecimal.ZERO));
-        return total;
-    }
-
+//    public void adicionarItens(List<PedidoItem> itens) {
+//        this.setPedidoItems(itens);
+//        this.getPedidoItems().forEach(i -> i.setPedido(this));
+//    }
+//
+//    public BigDecimal getValorTotalItens() {
+//        return getPedidoItems().stream()
+//                .map(PedidoItem::getValorTotal)
+//                .reduce(BigDecimal::add)
+//                .orElse(BigDecimal.ZERO);
+//    }
+//
+//    public void calcularValorTotal() {
+//        this.setValorTotal(calcularValorTotal(getValorTotalItens(), getValorFrete(), getValorDesconto()));
+//    }
+//
+//    public Long getDiasCriacao() {
+//        LocalDate inicio = getDataRegistro() != null ? getDataRegistro().toLocalDate() : LocalDate.now();
+//        return ChronoUnit.DAYS.between(inicio, LocalDate.now());
+//    }
+//
+//    public boolean isSalvarPermitido() {
+//        return !pedidoStatus.equals(PedidoStatus.CANCELADA);
+//    }
+//
+//    public boolean isSalvarProibido() {
+//        return !isSalvarPermitido();
+//    }
+//
+//    private BigDecimal calcularValorTotal(BigDecimal valorTotalItens, BigDecimal valorFrete, BigDecimal valorDesconto) {
+//        BigDecimal total = valorTotalItens
+//                .add(Optional.ofNullable(valorFrete).orElse(BigDecimal.ZERO))
+//                .subtract(Optional.ofNullable(valorDesconto).orElse(BigDecimal.ZERO));
+//        return total;
+//    }
     public Long getId() {
         return id;
     }
@@ -141,6 +136,14 @@ public class Pedido implements Serializable {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public LocalDateTime getDataRegistro() {
+        return dataRegistro;
+    }
+
+    public void setDataRegistro(LocalDateTime dataRegistro) {
+        this.dataRegistro = dataRegistro;
     }
 
     public LocalDateTime getDataHoraEntrega() {
@@ -172,7 +175,7 @@ public class Pedido implements Serializable {
     }
 
     public void setValorTotal(BigDecimal valorTotal) {
-        this.setValorTotal(valorTotal);
+        this.valorTotal = valorTotal;
     }
 
     public List<PedidoItem> getPedidoItems() {
@@ -181,18 +184,6 @@ public class Pedido implements Serializable {
 
     public void setPedidoItems(List<PedidoItem> pedidoItems) {
         this.pedidoItems = pedidoItems;
-    }
-
-    public PedidoStatus getPedidoStatus() {
-        return pedidoStatus;
-    }
-
-    public void setStatus(PedidoStatus statusPedido) {
-        this.setPedidoStatus(statusPedido);
-    }
-
-    public PagamentoForma getPagamentoForma() {
-        return pagamentoForma;
     }
 
     public Cliente getCliente() {
@@ -211,20 +202,16 @@ public class Pedido implements Serializable {
         this.loja = loja;
     }
 
-    public LocalDateTime getDataRegistro() {
-        return dataRegistro;
-    }
-
-    public void setDataRegistro(LocalDateTime dataRegistro) {
-        this.dataRegistro = dataRegistro;
-    }
-
     public Pagamento getPagamento() {
         return pagamento;
     }
 
     public void setPagamento(Pagamento pagamento) {
         this.pagamento = pagamento;
+    }
+
+    public PedidoStatus getPedidoStatus() {
+        return pedidoStatus;
     }
 
     public void setPedidoStatus(PedidoStatus pedidoStatus) {

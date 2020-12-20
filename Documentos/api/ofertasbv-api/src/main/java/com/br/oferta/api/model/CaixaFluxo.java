@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -34,6 +35,11 @@ public class CaixaFluxo implements Serializable {
     @Column(name = "descricao")
     private String descricao;
 
+    @NotNull(message = "Saldo anterior é obrigatório")
+    @DecimalMax(value = "9999999.99", message = "Saldo anterior deve ser menor que R$9.999.999,99")
+    @Column(name = "saldo_anterior")
+    private BigDecimal saldoAnterior;
+
     @NotNull(message = "Valor da entrada é obrigatório")
     @DecimalMin(value = "0.50", message = "O valor da entrada deve ser maior que R$0,00")
     @DecimalMax(value = "9999999.99", message = "O valor da entrada deve ser menor que R$9.999.999,99")
@@ -57,13 +63,47 @@ public class CaixaFluxo implements Serializable {
     private LocalDateTime dataRegistro;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "pedido_status", nullable = false)
+    @Column(name = "caixa_status", nullable = false)
     private CaixaStatus caixaStatus = CaixaStatus.FECHADO;
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "caixa_id", foreignKey = @ForeignKey(name = "fk_caixa_fluxo_caixa"))
+    private Caixa caixa;
 
     @JsonIgnoreProperties({"enderecos", "usuario"})
     @ManyToOne
-    @JoinColumn(name = "vendedor_id", nullable = false, foreignKey = @ForeignKey(name = "fk_caixa_vendedor"))
+    @JoinColumn(name = "vendedor_id", nullable = false, foreignKey = @ForeignKey(name = "fk_caixa_fluxo_vendedor"))
     private Vendedor vendedor;
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        CaixaFluxo other = (CaixaFluxo) obj;
+        if (getId() == null) {
+            if (other.getId() != null) {
+                return false;
+            }
+        } else if (!id.equals(other.id)) {
+            return false;
+        }
+        return true;
+    }
 
     public Long getId() {
         return id;
@@ -79,6 +119,14 @@ public class CaixaFluxo implements Serializable {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public BigDecimal getSaldoAnterior() {
+        return saldoAnterior;
+    }
+
+    public void setSaldoAnterior(BigDecimal saldoAnterior) {
+        this.saldoAnterior = saldoAnterior;
     }
 
     public BigDecimal getValorEntrada() {
@@ -121,42 +169,20 @@ public class CaixaFluxo implements Serializable {
         this.caixaStatus = caixaStatus;
     }
 
+    public Caixa getCaixa() {
+        return caixa;
+    }
+
+    public void setCaixa(Caixa caixa) {
+        this.caixa = caixa;
+    }
+
     public Vendedor getVendedor() {
         return vendedor;
     }
 
     public void setVendedor(Vendedor vendedor) {
         this.vendedor = vendedor;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        CaixaFluxo other = (CaixaFluxo) obj;
-        if (getId() == null) {
-            if (other.getId() != null) {
-                return false;
-            }
-        } else if (!id.equals(other.id)) {
-            return false;
-        }
-        return true;
     }
 
 }
