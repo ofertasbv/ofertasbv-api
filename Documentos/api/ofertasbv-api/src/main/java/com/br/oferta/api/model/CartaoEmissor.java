@@ -13,7 +13,8 @@ public enum CartaoEmissor {
 
     VISA("VISA"),
     MASTER_CARD("MASTER_CARD"),
-    ELO("ELO");
+    ELO("ELO"),
+    OUTRO("OUTRO");
 
     private String descricao;
 
