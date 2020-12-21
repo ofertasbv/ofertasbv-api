@@ -8,8 +8,11 @@ package com.br.oferta.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,15 +38,39 @@ public class Estoque implements Serializable {
     @Column(name = "id")
     private Long id;
 
+    @NotNull(message = "A data de registro é obrigatório")
+    @Column(name = "data_registro", nullable = false)
+    private LocalDate dataRegistro;
+
+    @Column(name = "data_vencimento")
+    private LocalDate dataVencimento;
+
     @NotNull(message = "A quantidade em estoque é obrigatória")
     @Max(value = 9999, message = "A quantidade em estoque deve ser menor que 9.999")
     @Column(name = "quantidade", nullable = false)
     private Integer quantidade;
 
-    @NotNull(message = "Valor é obrigatório")
-    @DecimalMin(value = "0.50", message = "O valor do produto deve ser maior que R$0,00")
+    @NotNull(message = "Valor unitário é obrigatório")
+    @DecimalMin(value = "0.50", message = "O valor unitár do produto deve ser maior que R$0,00")
     @DecimalMax(value = "9999999.99", message = "O valor do produto deve ser menor que R$9.999.999,99")
-    private BigDecimal valor;
+    @Column(name = "valor_unitario", nullable = false)
+    private BigDecimal valorUnitario;
+
+    @NotNull(message = "O percentual de ganho é obrigatório")
+    @DecimalMax(value = "100.0", message = "O valor do percentual de ganho deve ser menor que 100")
+    @Column(name = "percetual", nullable = false)
+    private BigDecimal percentual;
+
+    @NotNull(message = "Valor de venda é obrigatório")
+    @DecimalMin(value = "0.50", message = "O valor de venda do produto deve ser maior que R$0,00")
+    @DecimalMax(value = "9999999.99", message = "O valor de venda do produto deve ser menor que R$9.999.999,99")
+    @Column(name = "valor_venda", nullable = false)
+    private BigDecimal valorVenda;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "estoque_status", nullable = false)
+    private EstoqueStatus estoqueStatus = EstoqueStatus.BAIXO;
 
     @JsonIgnore
     @OneToOne(mappedBy = "estoque")
@@ -57,12 +84,60 @@ public class Estoque implements Serializable {
         this.id = id;
     }
 
+    public LocalDate getDataRegistro() {
+        return dataRegistro;
+    }
+
+    public void setDataRegistro(LocalDate dataRegistro) {
+        this.dataRegistro = dataRegistro;
+    }
+
+    public LocalDate getDataVencimento() {
+        return dataVencimento;
+    }
+
+    public void setDataVencimento(LocalDate dataVencimento) {
+        this.dataVencimento = dataVencimento;
+    }
+
     public Integer getQuantidade() {
         return quantidade;
     }
 
     public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
+    }
+
+    public BigDecimal getValorUnitario() {
+        return valorUnitario;
+    }
+
+    public void setValorUnitario(BigDecimal valorUnitario) {
+        this.valorUnitario = valorUnitario;
+    }
+
+    public BigDecimal getPercentual() {
+        return percentual;
+    }
+
+    public void setPercentual(BigDecimal percentual) {
+        this.percentual = percentual;
+    }
+
+    public BigDecimal getValorVenda() {
+        return valorVenda;
+    }
+
+    public void setValorVenda(BigDecimal valorVenda) {
+        this.valorVenda = valorVenda;
+    }
+
+    public EstoqueStatus getEstoqueStatus() {
+        return estoqueStatus;
+    }
+
+    public void setEstoqueStatus(EstoqueStatus estoqueStatus) {
+        this.estoqueStatus = estoqueStatus;
     }
 
     public Produto getProduto() {
@@ -73,19 +148,11 @@ public class Estoque implements Serializable {
         this.produto = produto;
     }
 
-    public BigDecimal getValor() {
-        return valor;
-    }
-
-    public void setValor(BigDecimal valor) {
-        this.valor = valor;
-    }
-
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         return result;
     }
 
@@ -101,8 +168,8 @@ public class Estoque implements Serializable {
             return false;
         }
         Estoque other = (Estoque) obj;
-        if (id == null) {
-            if (other.id != null) {
+        if (getId() == null) {
+            if (other.getId() != null) {
                 return false;
             }
         } else if (!id.equals(other.id)) {

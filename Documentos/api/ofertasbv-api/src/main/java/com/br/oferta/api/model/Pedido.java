@@ -8,12 +8,9 @@ package com.br.oferta.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -36,7 +33,6 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "pedido")
-@SuppressWarnings({"ConsistentAccessType", "IdDefinedInHierarchy"})
 public class Pedido implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -60,6 +60,10 @@ public class Promocao implements Serializable {
     @Column(name = "data_encerramento", nullable = false)
     private LocalDate dataFinal;
 
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "promocaotipo_id", foreignKey = @ForeignKey(name = "fk_promocao_tipo"))
+    private PromocaoTipo promocaoTipo;
+
     @JsonIgnoreProperties({"promocao", "loja", "estoque", "arquivos", "marca", "cores", "tamanhos", "subCategoria"})
     @OneToMany(mappedBy = "promocao", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Produto> produtos;
@@ -133,6 +137,14 @@ public class Promocao implements Serializable {
         this.dataFinal = dataFinal;
     }
 
+    public PromocaoTipo getPromocaoTipo() {
+        return promocaoTipo;
+    }
+
+    public void setPromocaoTipo(PromocaoTipo promocaoTipo) {
+        this.promocaoTipo = promocaoTipo;
+    }
+
     public List<Produto> getProdutos() {
         return produtos;
     }
@@ -145,7 +157,7 @@ public class Promocao implements Serializable {
         return loja;
     }
 
-    public void setPessoa(Loja loja) {
+    public void setLoja(Loja loja) {
         this.loja = loja;
     }
 
@@ -153,7 +165,7 @@ public class Promocao implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         return result;
     }
 
@@ -169,8 +181,8 @@ public class Promocao implements Serializable {
             return false;
         }
         Promocao other = (Promocao) obj;
-        if (id == null) {
-            if (other.id != null) {
+        if (getId() == null) {
+            if (other.getId() != null) {
                 return false;
             }
         } else if (!id.equals(other.id)) {

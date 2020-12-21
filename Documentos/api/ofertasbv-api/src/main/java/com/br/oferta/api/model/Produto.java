@@ -2,7 +2,6 @@ package com.br.oferta.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +21,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -123,9 +121,6 @@ public class Produto implements Serializable {
             foreignKey = @ForeignKey(name = "fk_produto_id"),
             inverseForeignKey = @ForeignKey(name = "fk_cor_id"))
     private List<Cor> cores = new ArrayList<>();
-
-    @Transient
-    private BigDecimal valorTotal;
 
     public Long getId() {
         return id;
@@ -285,25 +280,6 @@ public class Produto implements Serializable {
 
     public void setCores(List<Cor> cores) {
         this.cores = cores;
-    }
-
-    public BigDecimal getValorTotal() {
-        valorTotal = calcularValorDesconto();
-        return valorTotal;
-    }
-
-    public void setValorTotal(BigDecimal valorTotal) {
-        this.valorTotal = valorTotal;
-    }
-
-    private BigDecimal calcularDesconto() {
-        BigDecimal valor = promocao.getDesconto().divide(new BigDecimal(100));
-        return valor;
-    }
-
-    private BigDecimal calcularValorDesconto() {
-        BigDecimal valor = estoque.getValor().subtract(estoque.getValor().multiply(promocao.getDesconto().divide(new BigDecimal(100))));
-        return valor;
     }
 
     @Override

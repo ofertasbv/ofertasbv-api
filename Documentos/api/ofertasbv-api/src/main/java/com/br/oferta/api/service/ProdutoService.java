@@ -237,7 +237,7 @@ public class ProdutoService implements ProdutoServiceImpl {
         Path<String> nomeProduto = root.<String>get("nome");
         Path<Long> subCategoriaIdPath = root.join("subCategoria").<Long>get("id");
         Path<Long> promocaoIdPath = root.join("promocao").<Long>get("id");
-        Path<BigDecimal> valorProduto = root.join("estoque").<BigDecimal>get("valor");
+        Path<BigDecimal> valorProduto = root.join("estoque").<BigDecimal>get("valorVenda");
 
         if (filter.getNomeProduto() != null) {
             Predicate paramentro = builder.like(builder.lower(nomeProduto), "%" + filter.getNomeProduto() + "%");
