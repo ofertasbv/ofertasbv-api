@@ -13,6 +13,7 @@ public class OfertaApiApplication {
     private static ApplicationContext APPLICATION_CONTEXT;
 
     public static void main(String[] args) {
+        System.out.println("UNICIANDO API - OFERTASBV");
         APPLICATION_CONTEXT = SpringApplication.run(OfertaApiApplication.class, args);
     }
 
