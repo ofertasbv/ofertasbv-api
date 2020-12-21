@@ -55,6 +55,11 @@ public class Pagamento implements Serializable {
 
     @NotNull
     @Enumerated(EnumType.STRING)
+    @Column(name = "pagamento_tipo", nullable = false)
+    private PagamentoTipo pagamentoTipo = PagamentoTipo.PRAZO;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
     @Column(name = "pagamento_forma", nullable = false)
     private PagamentoForma pagamentoForma = PagamentoForma.BOLETO_BANCARIO;
 
@@ -99,6 +104,14 @@ public class Pagamento implements Serializable {
 
     public void setPagamentoForma(PagamentoForma pagamentoForma) {
         this.pagamentoForma = pagamentoForma;
+    }
+
+    public PagamentoTipo getPagamentoTipo() {
+        return pagamentoTipo;
+    }
+
+    public void setPagamentoTipo(PagamentoTipo pagamentoTipo) {
+        this.pagamentoTipo = pagamentoTipo;
     }
 
     public List<Fatura> getFaturas() {
