@@ -47,7 +47,7 @@ public class Produto implements Serializable {
     @Column(name = "descricao")
     private String descricao;
 
-    @NotNull(message = "A foto em de capa é obrigatória")
+//    @NotNull(message = "A foto em de capa é obrigatória")
     @Column(name = "foto")
     private String foto;
 

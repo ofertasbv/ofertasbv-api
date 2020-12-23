@@ -30,7 +30,7 @@ public class Categoria implements Serializable {
     @Column(name = "nome")
     private String nome;
 
-    @NotNull(message = "A foto é obrigatório")
+//    @NotNull(message = "A foto é obrigatório")
     @Column(name = "foto")
     private String foto;
 
