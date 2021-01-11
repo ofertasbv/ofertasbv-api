@@ -45,17 +45,25 @@ public class Pedido implements Serializable {
     @Column(name = "descricao")
     private String descricao;
 
-    @Column(name = "data_criacao")
+    @NotNull(message = "Data registro é obrigatório")
+    @Column(name = "data_criacao", nullable = false)
     private LocalDateTime dataRegistro;
 
-    @Column(name = "data_hora_entrega")
+    @NotNull(message = "Data entrega é obrigatório")
+    @Column(name = "data_hora_entrega", nullable = false)
     private LocalDateTime dataHoraEntrega;
 
-    @Column(name = "valor_frete")
+    @NotNull(message = "Valor da entrega é obrigatório")
+    @Column(name = "valor_frete", nullable = false, precision = 10, scale = 2)
     private BigDecimal valorFrete;
 
-    @Column(name = "valor_desconto")
+    @NotNull(message = "Valor do desconto é obrigatório")
+    @Column(name = "valor_desconto", nullable = false, precision = 10, scale = 2)
     private BigDecimal valorDesconto;
+
+    @NotNull(message = "Valor inicial é obrigatório")
+    @Column(name = "valor_inicial", nullable = false, precision = 10, scale = 2)
+    private BigDecimal valorInicial;
 
     @NotNull(message = "O valor total é obrigatório")
     @Column(name = "valor_total", nullable = false, precision = 10, scale = 2)
@@ -83,41 +91,6 @@ public class Pedido implements Serializable {
     @Column(name = "pedido_status", nullable = false)
     private PedidoStatus pedidoStatus = PedidoStatus.CANCELADA;
 
-//    public void adicionarItens(List<PedidoItem> itens) {
-//        this.setPedidoItems(itens);
-//        this.getPedidoItems().forEach(i -> i.setPedido(this));
-//    }
-//
-//    public BigDecimal getValorTotalItens() {
-//        return getPedidoItems().stream()
-//                .map(PedidoItem::getValorTotal)
-//                .reduce(BigDecimal::add)
-//                .orElse(BigDecimal.ZERO);
-//    }
-//
-//    public void calcularValorTotal() {
-//        this.setValorTotal(calcularValorTotal(getValorTotalItens(), getValorFrete(), getValorDesconto()));
-//    }
-//
-//    public Long getDiasCriacao() {
-//        LocalDate inicio = getDataRegistro() != null ? getDataRegistro().toLocalDate() : LocalDate.now();
-//        return ChronoUnit.DAYS.between(inicio, LocalDate.now());
-//    }
-//
-//    public boolean isSalvarPermitido() {
-//        return !pedidoStatus.equals(PedidoStatus.CANCELADA);
-//    }
-//
-//    public boolean isSalvarProibido() {
-//        return !isSalvarPermitido();
-//    }
-//
-//    private BigDecimal calcularValorTotal(BigDecimal valorTotalItens, BigDecimal valorFrete, BigDecimal valorDesconto) {
-//        BigDecimal total = valorTotalItens
-//                .add(Optional.ofNullable(valorFrete).orElse(BigDecimal.ZERO))
-//                .subtract(Optional.ofNullable(valorDesconto).orElse(BigDecimal.ZERO));
-//        return total;
-//    }
     public Long getId() {
         return id;
     }
@@ -164,6 +137,14 @@ public class Pedido implements Serializable {
 
     public void setValorDesconto(BigDecimal valorDesconto) {
         this.valorDesconto = valorDesconto;
+    }
+
+    public BigDecimal getValorInicial() {
+        return valorInicial;
+    }
+
+    public void setValorInicial(BigDecimal valorInicial) {
+        this.valorInicial = valorInicial;
     }
 
     public BigDecimal getValorTotal() {
@@ -214,4 +195,39 @@ public class Pedido implements Serializable {
         this.pedidoStatus = pedidoStatus;
     }
 
+    //    public void adicionarItens(List<PedidoItem> itens) {
+//        this.setPedidoItems(itens);
+//        this.getPedidoItems().forEach(i -> i.setPedido(this));
+//    }
+//
+//    public BigDecimal getValorTotalItens() {
+//        return getPedidoItems().stream()
+//                .map(PedidoItem::getValorTotal)
+//                .reduce(BigDecimal::add)
+//                .orElse(BigDecimal.ZERO);
+//    }
+//
+//    public void calcularValorTotal() {
+//        this.setValorTotal(calcularValorTotal(getValorTotalItens(), getValorFrete(), getValorDesconto()));
+//    }
+//
+//    public Long getDiasCriacao() {
+//        LocalDate inicio = getDataRegistro() != null ? getDataRegistro().toLocalDate() : LocalDate.now();
+//        return ChronoUnit.DAYS.between(inicio, LocalDate.now());
+//    }
+//
+//    public boolean isSalvarPermitido() {
+//        return !pedidoStatus.equals(PedidoStatus.CANCELADA);
+//    }
+//
+//    public boolean isSalvarProibido() {
+//        return !isSalvarPermitido();
+//    }
+//
+//    private BigDecimal calcularValorTotal(BigDecimal valorTotalItens, BigDecimal valorFrete, BigDecimal valorDesconto) {
+//        BigDecimal total = valorTotalItens
+//                .add(Optional.ofNullable(valorFrete).orElse(BigDecimal.ZERO))
+//                .subtract(Optional.ofNullable(valorDesconto).orElse(BigDecimal.ZERO));
+//        return total;
+//    }
 }
