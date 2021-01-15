@@ -12,7 +12,7 @@ package com.br.oferta.api.model;
 public enum FaturaStatus {
 
     PAGA("PAGA"),
-    ATRASADA("ATRASADA"),
+    PENDENTE("PENDENTE"),
     CANCELADA("CANCELA");
 
     private String descricao;
