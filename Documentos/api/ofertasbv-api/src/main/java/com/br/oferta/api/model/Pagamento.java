@@ -61,7 +61,7 @@ public class Pagamento implements Serializable {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "pagamento_forma", nullable = false)
-    private PagamentoForma pagamentoForma = PagamentoForma.BOLETO_BANCARIO;
+    private PagamentoForma pagamentoForma = PagamentoForma.DINHEIRO;
 
     @OneToMany(mappedBy = "pagamento", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Fatura> faturas;

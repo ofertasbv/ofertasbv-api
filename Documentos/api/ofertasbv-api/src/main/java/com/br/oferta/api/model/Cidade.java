@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,7 +32,7 @@ public class Cidade implements Serializable {
 
     @NotNull(message = "Estado é obrigatório")
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "estado_id")
+    @JoinColumn(name = "estado_id", foreignKey = @ForeignKey(name = "fk_estado_cidade"))
     private Estado estado;
 
     @JsonIgnore///Properties({"enderecos"})

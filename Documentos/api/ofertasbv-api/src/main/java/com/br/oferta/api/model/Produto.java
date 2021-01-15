@@ -47,10 +47,6 @@ public class Produto implements Serializable {
     @Column(name = "descricao")
     private String descricao;
 
-//    @NotNull(message = "A foto em de capa é obrigatória")
-    @Column(name = "foto")
-    private String foto;
-
     @NotNull(message = "A data de registro é obrigatória")
     @Column(name = "data_registro")
     private LocalDate dataRegistro;
@@ -144,14 +140,6 @@ public class Produto implements Serializable {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
-    }
-
-    public String getFoto() {
-        return foto;
-    }
-
-    public void setFoto(String foto) {
-        this.foto = foto;
     }
 
     public boolean isStatus() {

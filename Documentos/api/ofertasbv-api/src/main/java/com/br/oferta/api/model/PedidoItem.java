@@ -64,7 +64,7 @@ public class PedidoItem implements Serializable {
 
     @JsonIgnoreProperties({"subCategoria", "arquivos", "estoque", "promocao", "loja", "marca", "tamanhos", "cores"})
     @ManyToOne
-    @JoinColumn(name = "produto_id", nullable = false)
+    @JoinColumn(name = "produto_id", foreignKey = @ForeignKey(name = "fk_pedidoitem_produto"), nullable = false)
     private Produto produto;
 
     public Long getId() {
