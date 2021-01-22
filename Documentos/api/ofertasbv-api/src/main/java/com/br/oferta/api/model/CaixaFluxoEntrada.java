@@ -46,6 +46,40 @@ public class CaixaFluxoEntrada implements Serializable {
     @JoinColumn(name = "caixafluxo_id", foreignKey = @ForeignKey(name = "fk_caixa_fluxo_entrada_caixa_fluxo"))
     private CaixaFluxo caixaFluxo;
 
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "pedido_id", foreignKey = @ForeignKey(name = "fk_caixa_fluxo_entrada_pedido"))
+    private Pedido pedido;
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        CaixaFluxoEntrada other = (CaixaFluxoEntrada) obj;
+        if (getId() == null) {
+            if (other.getId() != null) {
+                return false;
+            }
+        } else if (!id.equals(other.id)) {
+            return false;
+        }
+        return true;
+    }
+
     public Long getId() {
         return id;
     }
@@ -86,34 +120,12 @@ public class CaixaFluxoEntrada implements Serializable {
         this.caixaFluxo = caixaFluxo;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        return result;
+    public Pedido getPedido() {
+        return pedido;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        CaixaFluxoEntrada other = (CaixaFluxoEntrada) obj;
-        if (getId() == null) {
-            if (other.getId() != null) {
-                return false;
-            }
-        } else if (!id.equals(other.id)) {
-            return false;
-        }
-        return true;
+    public void setPedido(Pedido pedido) {
+        this.pedido = pedido;
     }
 
 }

@@ -1,11 +1,7 @@
 package com.br.oferta.api.controller;
 
-import com.br.oferta.api.model.Caixa;
-import com.br.oferta.api.model.CaixaFluxo;
 import com.br.oferta.api.model.CaixaFluxoSaida;
 import com.br.oferta.api.service.CaixaFluxoSaidaService;
-import com.br.oferta.api.service.CaixaFluxoService;
-import com.br.oferta.api.service.CaixaService;
 import java.util.List;
 import java.util.Optional;
 

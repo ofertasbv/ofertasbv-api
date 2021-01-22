@@ -21,6 +21,8 @@ public interface EnderecoServiceImpl {
     List<Endereco> findAllByPessoa(Long id);
 
     Optional<Endereco> findById(Long id);
+    
+    Optional<Endereco> findByCep(String cep);
 
     Endereco create(Endereco e);
 

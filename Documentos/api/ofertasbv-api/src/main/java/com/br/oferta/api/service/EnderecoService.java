@@ -52,6 +52,13 @@ public class EnderecoService implements EnderecoServiceImpl {
     }
 
     @Override
+    public Optional<Endereco> findByCep(String cep) {
+        Query query = em.createQuery("SELECT p FROM Endereco p WHERE p.cep =:cep");
+        query.setParameter("cep", cep);
+        return (Optional<Endereco>) query.getSingleResult();
+    }
+
+    @Override
     public Optional<Endereco> findById(Long id) {
         return enderecoRepository.findById(id);
     }

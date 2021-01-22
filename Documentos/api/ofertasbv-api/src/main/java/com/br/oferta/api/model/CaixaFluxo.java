@@ -25,7 +25,7 @@ import javax.validation.constraints.NotNull;
 @SuppressWarnings("PersistenceUnitPresent")
 public class CaixaFluxo implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,6 +65,9 @@ public class CaixaFluxo implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "caixa_status", nullable = false)
     private CaixaStatus caixaStatus = CaixaStatus.FECHADO;
+
+    @Column(name = "status")
+    private boolean status;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "caixa_id", foreignKey = @ForeignKey(name = "fk_caixa_fluxo_caixa"))
@@ -167,6 +170,14 @@ public class CaixaFluxo implements Serializable {
 
     public void setCaixaStatus(CaixaStatus caixaStatus) {
         this.caixaStatus = caixaStatus;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
     public Caixa getCaixa() {

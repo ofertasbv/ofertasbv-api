@@ -19,9 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.br.oferta.api.util.event.RecursoCriadoEvent;
 import com.br.oferta.api.model.Categoria;
-import com.br.oferta.api.model.Cliente;
 import com.br.oferta.api.service.CategoriaService;
-import com.br.oferta.api.util.teste.TesteUUID;
 import com.br.oferta.api.util.upload.FileStorageService;
 import com.br.oferta.api.util.upload.payload.UploadFileResponse;
 import io.swagger.annotations.Api;

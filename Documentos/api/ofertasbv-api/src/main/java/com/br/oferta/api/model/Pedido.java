@@ -89,7 +89,7 @@ public class Pedido implements Serializable {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "pedido_status", nullable = false)
-    private PedidoStatus pedidoStatus = PedidoStatus.CANCELADA;
+    private PedidoStatus pedidoStatus = PedidoStatus.CRIADO;
 
     public Long getId() {
         return id;

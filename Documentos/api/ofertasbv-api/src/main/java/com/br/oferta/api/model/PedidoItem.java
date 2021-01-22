@@ -67,6 +67,56 @@ public class PedidoItem implements Serializable {
     @JoinColumn(name = "produto_id", foreignKey = @ForeignKey(name = "fk_pedidoitem_produto"), nullable = false)
     private Produto produto;
 
+    @ManyToOne
+    @JoinColumn(name = "tamanho_id", foreignKey = @ForeignKey(name = "fk_pedidoitem_tamanho"), nullable = false)
+    private Tamanho tamanho;
+
+    @Transient
+    public boolean isProdutoAssociado() {
+        return this.getProduto() != null && this.getProduto().getId() != null;
+    }
+
+    @Transient
+    public boolean isEstoqueSuficiente() {
+        return this.getProduto().getId() == null
+                || this.getQuantidade() > 0;
+    }
+
+    @Transient
+    public boolean isEstoqueInsuficiente() {
+        return !this.isEstoqueSuficiente();
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        PedidoItem other = (PedidoItem) obj;
+        if (getId() == null) {
+            if (other.getId() != null) {
+                return false;
+            }
+        } else if (!id.equals(other.id)) {
+            return false;
+        }
+        return true;
+    }
+
     public Long getId() {
         return id;
     }
@@ -123,50 +173,12 @@ public class PedidoItem implements Serializable {
         this.produto = produto;
     }
 
-    @Transient
-    public boolean isProdutoAssociado() {
-        return this.getProduto() != null && this.getProduto().getId() != null;
+    public Tamanho getTamanho() {
+        return tamanho;
     }
 
-    @Transient
-    public boolean isEstoqueSuficiente() {
-        return this.getProduto().getId() == null
-                || this.getQuantidade() > 0;
-    }
-
-    @Transient
-    public boolean isEstoqueInsuficiente() {
-        return !this.isEstoqueSuficiente();
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        PedidoItem other = (PedidoItem) obj;
-        if (getId() == null) {
-            if (other.getId() != null) {
-                return false;
-            }
-        } else if (!id.equals(other.id)) {
-            return false;
-        }
-        return true;
+    public void setTamanho(Tamanho tamanho) {
+        this.tamanho = tamanho;
     }
 
 }

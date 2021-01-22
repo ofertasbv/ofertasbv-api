@@ -11,9 +11,10 @@ package com.br.oferta.api.model;
  */
 public enum PedidoStatus {
 
-    ORCAMENTO("Orçamento"),
-    EMITIDA("Emitida"),
-    CANCELADA("Cancelada");
+    CRIADO("CRIADO"),
+    CONFIRMADO("CONFIRMADO"),
+    ENTREGUE("ENTREGUE"),
+    CANCELADO("CANCELADO");
 
     private String descricao;
 
