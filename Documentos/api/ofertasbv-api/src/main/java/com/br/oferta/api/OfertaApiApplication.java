@@ -13,7 +13,7 @@ public class OfertaApiApplication {
     private static ApplicationContext APPLICATION_CONTEXT;
 
     public static void main(String[] args) {
-        System.out.println("UNICIANDO API - OFERTASBV - E-COMMERCE - 09-JANEIRO-2021");
+        System.out.println("UNICIANDO API - OFERTASBV - E-COMMERCE - 04-FEVEREIRO-2021");
         System.out.println("TODOS OS DIREITO RESERVADO - GDADOS");
         APPLICATION_CONTEXT = SpringApplication.run(OfertaApiApplication.class, args);
     }
