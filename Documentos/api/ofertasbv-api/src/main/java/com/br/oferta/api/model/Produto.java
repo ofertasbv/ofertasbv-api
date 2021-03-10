@@ -47,9 +47,8 @@ public class Produto implements Serializable {
     @Column(name = "descricao")
     private String descricao;
 
-    @NotNull(message = "A data de registro é obrigatória")
-    @Column(name = "data_registro")
-    private LocalDate dataRegistro;
+    @Column(name = "foto")
+    private String foto;
 
     @Column(name = "codigo_barra")
     private String codigoBarra;
@@ -118,12 +117,50 @@ public class Produto implements Serializable {
             inverseForeignKey = @ForeignKey(name = "fk_cor_id"))
     private List<Cor> cores = new ArrayList<>();
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Produto other = (Produto) obj;
+        if (getId() == null) {
+            if (other.getId() != null) {
+                return false;
+            }
+        } else if (!id.equals(other.id)) {
+            return false;
+        }
+        return true;
+    }
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getSku() {
+        return sku;
+    }
+
+    public void setSku(String sku) {
+        this.sku = sku;
     }
 
     public String getNome() {
@@ -142,6 +179,22 @@ public class Produto implements Serializable {
         this.descricao = descricao;
     }
 
+    public String getFoto() {
+        return foto;
+    }
+
+    public void setFoto(String foto) {
+        this.foto = foto;
+    }
+    
+    public String getCodigoBarra() {
+        return codigoBarra;
+    }
+
+    public void setCodigoBarra(String codigoBarra) {
+        this.codigoBarra = codigoBarra;
+    }
+
     public boolean isStatus() {
         return status;
     }
@@ -150,20 +203,20 @@ public class Produto implements Serializable {
         this.status = status;
     }
 
-    public LocalDate getDataRegistro() {
-        return dataRegistro;
+    public boolean isNovo() {
+        return novo;
     }
 
-    public void setDataRegistro(LocalDate dataRegistro) {
-        this.dataRegistro = dataRegistro;
+    public void setNovo(boolean novo) {
+        this.novo = novo;
     }
 
-    public String getCodigoBarra() {
-        return codigoBarra;
+    public boolean isDestaque() {
+        return destaque;
     }
 
-    public void setCodigoBarra(String codigoBarra) {
-        this.codigoBarra = codigoBarra;
+    public void setDestaque(boolean destaque) {
+        this.destaque = destaque;
     }
 
     public Medida getMedida() {
@@ -174,12 +227,28 @@ public class Produto implements Serializable {
         this.medida = medida;
     }
 
+    public Origem getOrigem() {
+        return origem;
+    }
+
+    public void setOrigem(Origem origem) {
+        this.origem = origem;
+    }
+
     public SubCategoria getSubCategoria() {
         return subCategoria;
     }
 
     public void setSubCategoria(SubCategoria subCategoria) {
         this.subCategoria = subCategoria;
+    }
+
+    public Promocao getPromocao() {
+        return promocao;
+    }
+
+    public void setPromocao(Promocao promocao) {
+        this.promocao = promocao;
     }
 
     public Loja getLoja() {
@@ -206,52 +275,12 @@ public class Produto implements Serializable {
         this.estoque = estoque;
     }
 
-    public boolean isDestaque() {
-        return destaque;
-    }
-
-    public void setDestaque(boolean destaque) {
-        this.destaque = destaque;
-    }
-
     public Marca getMarca() {
         return marca;
     }
 
     public void setMarca(Marca marca) {
         this.marca = marca;
-    }
-
-    public boolean isNovo() {
-        return novo;
-    }
-
-    public void setNovo(boolean novo) {
-        this.novo = novo;
-    }
-
-    public Origem getOrigem() {
-        return origem;
-    }
-
-    public void setOrigem(Origem origem) {
-        this.origem = origem;
-    }
-
-    public String getSku() {
-        return sku;
-    }
-
-    public void setSku(String sku) {
-        this.sku = sku;
-    }
-
-    public Promocao getPromocao() {
-        return promocao;
-    }
-
-    public void setPromocao(Promocao promocao) {
-        this.promocao = promocao;
     }
 
     public List<Tamanho> getTamanhos() {
@@ -269,35 +298,4 @@ public class Produto implements Serializable {
     public void setCores(List<Cor> cores) {
         this.cores = cores;
     }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        Produto other = (Produto) obj;
-        if (id == null) {
-            if (other.id != null) {
-                return false;
-            }
-        } else if (!id.equals(other.id)) {
-            return false;
-        }
-        return true;
-    }
-
 }

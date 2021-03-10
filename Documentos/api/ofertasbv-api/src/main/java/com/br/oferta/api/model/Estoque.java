@@ -38,12 +38,12 @@ public class Estoque implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @NotNull(message = "A data de registro é obrigatório")
-    @Column(name = "data_registro", nullable = false)
-    private LocalDate dataRegistro;
-
-    @Column(name = "data_vencimento")
-    private LocalDate dataVencimento;
+//    @NotNull(message = "A data de registro é obrigatório")
+//    @Column(name = "data_registro", nullable = false)
+//    private LocalDate dataRegistro;
+//
+//    @Column(name = "data_vencimento")
+//    private LocalDate dataVencimento;
 
     @NotNull(message = "A quantidade em estoque é obrigatória")
     @Max(value = 9999, message = "A quantidade em estoque deve ser menor que 9.999")
@@ -84,21 +84,21 @@ public class Estoque implements Serializable {
         this.id = id;
     }
 
-    public LocalDate getDataRegistro() {
-        return dataRegistro;
-    }
-
-    public void setDataRegistro(LocalDate dataRegistro) {
-        this.dataRegistro = dataRegistro;
-    }
-
-    public LocalDate getDataVencimento() {
-        return dataVencimento;
-    }
-
-    public void setDataVencimento(LocalDate dataVencimento) {
-        this.dataVencimento = dataVencimento;
-    }
+//    public LocalDate getDataRegistro() {
+//        return dataRegistro;
+//    }
+//
+//    public void setDataRegistro(LocalDate dataRegistro) {
+//        this.dataRegistro = dataRegistro;
+//    }
+//
+//    public LocalDate getDataVencimento() {
+//        return dataVencimento;
+//    }
+//
+//    public void setDataVencimento(LocalDate dataVencimento) {
+//        this.dataVencimento = dataVencimento;
+//    }
 
     public Integer getQuantidade() {
         return quantidade;

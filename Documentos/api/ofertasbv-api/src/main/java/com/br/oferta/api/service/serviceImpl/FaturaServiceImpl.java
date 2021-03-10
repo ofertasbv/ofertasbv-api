@@ -5,7 +5,7 @@
  */
 package com.br.oferta.api.service.serviceImpl;
 
-import com.br.oferta.api.model.Fatura;
+import com.br.oferta.api.model.Parcela;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +16,13 @@ import org.springframework.http.ResponseEntity;
  */
 public interface FaturaServiceImpl {
 
-    List<Fatura> findBySort();
+    List<Parcela> findBySort();
 
-    Optional<Fatura> findById(Long id);
+    Optional<Parcela> findById(Long id);
 
-    Fatura create(Fatura f);
+    Parcela create(Parcela f);
 
-    ResponseEntity update(Long id, Fatura f);
+    ResponseEntity update(Long id, Parcela f);
 
     ResponseEntity delete(Long id);
 }

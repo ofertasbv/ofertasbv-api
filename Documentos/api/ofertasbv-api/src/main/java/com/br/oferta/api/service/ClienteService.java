@@ -10,6 +10,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.br.oferta.api.model.Cliente;
+import com.br.oferta.api.model.Vendedor;
 import com.br.oferta.api.repository.PermissaoRepository;
 import com.br.oferta.api.util.error.ServiceNotFoundExeception;
 import java.util.List;
@@ -21,6 +22,12 @@ import com.br.oferta.api.repository.ClienteRepository;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,8 +67,23 @@ public class ClienteService implements ClienteServiceImpl {
 
     @Override
     public List<Cliente> findByNome(String nome) {
-        Query query = em.createQuery("SELECT a FROM Cliente a WHERE a.nome =:nome");
-        return query.getResultList();
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<Cliente> query = criteriaBuilder.createQuery(Cliente.class);
+        Root<Cliente> n = query.from(Cliente.class);
+
+        javax.persistence.criteria.Path<String> nomePath = n.<String>get("nome");
+        List<Predicate> predicates = new ArrayList<>();
+
+        if (nome != null) {
+            Predicate paramentro = criteriaBuilder.like(criteriaBuilder.lower(nomePath), "%" + nome.toLowerCase() + "%");
+            predicates.add(paramentro);
+        }
+
+        query.where((Predicate[]) predicates.toArray(new Predicate[0]));
+        query.orderBy(criteriaBuilder.desc(n.get("id")));
+        TypedQuery<Cliente> typedQuery = em.createQuery(query);
+
+        return typedQuery.getResultList();
     }
 
     @Override

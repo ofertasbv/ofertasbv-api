@@ -9,6 +9,7 @@ package com.br.oferta.api.model;
  *
  * @author fabio
  */
+
 public enum PagamentoTipo {
 
     VISTA("VISTA"),

@@ -13,6 +13,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,8 +29,8 @@ import org.springframework.format.annotation.DateTimeFormat;
  * @author fabio
  */
 @Entity
-@Table(name = "fatura", schema = "oferta")
-public class Fatura implements Serializable {
+@Table(name = "parcela", schema = "oferta")
+public class Parcela implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -67,15 +68,15 @@ public class Fatura implements Serializable {
     private LocalDate dataCancelamento;
 
     @NotNull(message = "Valor unitário é obrigatório")
-    @Column(name = "valor_pago", nullable = false, precision = 10, scale = 2)
-    private BigDecimal valorPago;
+    @Column(name = "valor", nullable = false, precision = 10, scale = 2)
+    private BigDecimal valor;
 
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "fatura_status", nullable = false)
     private FaturaStatus faturaStatus = FaturaStatus.CANCELADA;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pagamento_id", foreignKey = @ForeignKey(name = "fk_fatura_pagamento"), nullable = false)
     private Pagamento pagamento;
 
@@ -135,12 +136,12 @@ public class Fatura implements Serializable {
         this.dataCancelamento = dataCancelamento;
     }
 
-    public BigDecimal getValorPago() {
-        return valorPago;
+    public BigDecimal getValor() {
+        return valor;
     }
 
-    public void setValorPago(BigDecimal valorPago) {
-        this.valorPago = valorPago;
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
     }
 
     public FaturaStatus getFaturaStatus() {
@@ -178,7 +179,7 @@ public class Fatura implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Fatura other = (Fatura) obj;
+        Parcela other = (Parcela) obj;
         if (getId() == null) {
             if (other.getId() != null) {
                 return false;

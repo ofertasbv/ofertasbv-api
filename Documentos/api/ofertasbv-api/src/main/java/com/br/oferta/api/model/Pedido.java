@@ -78,7 +78,7 @@ public class Pedido implements Serializable {
     @JoinColumn(name = "cliente_id", nullable = false, foreignKey = @ForeignKey(name = "fk_pedido_cliente"))
     private Cliente cliente;
 
-    @JsonIgnoreProperties({"enderecos", "usuario"})
+    @JsonIgnoreProperties({"enderecos", "usuario", "produtos"})
     @ManyToOne
     @JoinColumn(name = "loja_id", nullable = false, foreignKey = @ForeignKey(name = "fk_pedido_loja"))
     private Loja loja;

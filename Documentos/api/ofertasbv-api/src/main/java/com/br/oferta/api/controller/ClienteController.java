@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.br.oferta.api.util.event.RecursoCriadoEvent;
 import com.br.oferta.api.model.Cliente;
-import com.br.oferta.api.model.Produto;
 import com.br.oferta.api.service.ClienteService;
 import com.br.oferta.api.util.upload.FileStorageService;
 import com.br.oferta.api.util.upload.payload.UploadFileResponse;

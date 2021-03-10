@@ -56,8 +56,8 @@ public class Pessoa implements Serializable {
     @Column(name = "tipo_pessoa")
     private TipoPessoa tipoPessoa = TipoPessoa.FISICA;
 
-    @Column(name = "data_registro")
-    private LocalDate dataRegistro;
+//    @Column(name = "data_registro")
+//    private LocalDate dataRegistro;
 
     @Column(name = "foto")
     private String foto;
@@ -116,13 +116,13 @@ public class Pessoa implements Serializable {
         this.tipoPessoa = tipoPessoa;
     }
 
-    public LocalDate getDataRegistro() {
-        return dataRegistro;
-    }
-
-    public void setDataRegistro(LocalDate dataRegistro) {
-        this.dataRegistro = dataRegistro;
-    }
+//    public LocalDate getDataRegistro() {
+//        return dataRegistro;
+//    }
+//
+//    public void setDataRegistro(LocalDate dataRegistro) {
+//        this.dataRegistro = dataRegistro;
+//    }
 
     public String getFoto() {
         return foto;

@@ -5,6 +5,7 @@
  */
 package com.br.oferta.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -63,8 +64,9 @@ public class Pagamento implements Serializable {
     @Column(name = "pagamento_forma", nullable = false)
     private PagamentoForma pagamentoForma = PagamentoForma.DINHEIRO;
 
+    @JsonIgnoreProperties({"pagamento"})
     @OneToMany(mappedBy = "pagamento", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Fatura> faturas;
+    private List<Parcela> parcelas;
 
     public Long getId() {
         return id;
@@ -114,12 +116,12 @@ public class Pagamento implements Serializable {
         this.pagamentoTipo = pagamentoTipo;
     }
 
-    public List<Fatura> getFaturas() {
-        return faturas;
+    public List<Parcela> getParcelas() {
+        return parcelas;
     }
 
-    public void setFaturas(List<Fatura> faturas) {
-        this.faturas = faturas;
+    public void setParcelas(List<Parcela> parcelas) {
+        this.parcelas = parcelas;
     }
 
     @Override

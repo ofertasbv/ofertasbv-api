@@ -1,6 +1,7 @@
 package com.br.oferta.api.service;
 
 import com.br.oferta.api.model.Permissao;
+import com.br.oferta.api.model.Promocao;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
@@ -21,6 +22,12 @@ import com.br.oferta.api.service.serviceImpl.VendedorServiceImpl;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,8 +67,23 @@ public class VendedorService implements VendedorServiceImpl {
 
     @Override
     public List<Vendedor> findByNome(String nome) {
-        Query query = em.createQuery("SELECT a FROM Vendedor a WHERE a.nome =:nome");
-        return query.getResultList();
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<Vendedor> query = criteriaBuilder.createQuery(Vendedor.class);
+        Root<Vendedor> n = query.from(Vendedor.class);
+
+        javax.persistence.criteria.Path<String> nomePath = n.<String>get("nome");
+        List<Predicate> predicates = new ArrayList<>();
+
+        if (nome != null) {
+            Predicate paramentro = criteriaBuilder.like(criteriaBuilder.lower(nomePath), "%" + nome.toLowerCase() + "%");
+            predicates.add(paramentro);
+        }
+
+        query.where((Predicate[]) predicates.toArray(new Predicate[0]));
+        query.orderBy(criteriaBuilder.desc(n.get("id")));
+        TypedQuery<Vendedor> typedQuery = em.createQuery(query);
+
+        return typedQuery.getResultList();
     }
 
     @Override

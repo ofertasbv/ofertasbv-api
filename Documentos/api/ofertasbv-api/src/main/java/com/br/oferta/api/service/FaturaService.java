@@ -6,7 +6,7 @@
 package com.br.oferta.api.service;
 
 import com.br.oferta.api.service.serviceImpl.FaturaServiceImpl;
-import com.br.oferta.api.model.Fatura;
+import com.br.oferta.api.model.Parcela;
 import com.br.oferta.api.repository.FaturaRepository;
 import com.br.oferta.api.util.error.ServiceNotFoundExeception;
 import java.util.List;
@@ -37,24 +37,24 @@ public class FaturaService implements FaturaServiceImpl {
     }
 
     @Override
-    public List<Fatura> findBySort() {
+    public List<Parcela> findBySort() {
         Query query = em.createQuery("SELECT a FROM Fatura a ORDER BY a.id DESC");
         return query.getResultList();
     }
 
     @Override
-    public Optional<Fatura> findById(Long id) {
+    public Optional<Parcela> findById(Long id) {
         return faturaRepository.findById(id);
     }
 
     @Override
-    public Fatura create(Fatura f) {
+    public Parcela create(Parcela f) {
         return faturaRepository.saveAndFlush(f);
     }
 
     @Override
-    public ResponseEntity update(Long id, Fatura f) {
-        Fatura salva = faturaRepository.findById(id).get();
+    public ResponseEntity update(Long id, Parcela f) {
+        Parcela salva = faturaRepository.findById(id).get();
         if (salva == null) {
             throw new ServiceNotFoundExeception("Fatura não encotrado com ID: " + id);
         }
@@ -65,7 +65,7 @@ public class FaturaService implements FaturaServiceImpl {
 
     @Override
     public ResponseEntity delete(Long id) {
-        Fatura exclui = faturaRepository.findById(id).get();
+        Parcela exclui = faturaRepository.findById(id).get();
         if (exclui == null) {
             throw new EmptyResultDataAccessException(1);
         }
