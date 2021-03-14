@@ -199,43 +199,13 @@ public class ProdutoService implements ProdutoServiceImpl {
         return typedQuery.getResultList();
     }
 
-//     @Override
-//    public Page<Produto> filtrar1(ProdutoFilter filter, Pageable pageable) {
-//
-//        CriteriaBuilder builder = em.getCriteriaBuilder();
-//        CriteriaQuery<Produto> criteria = builder.createQuery(Produto.class);
-//        Root<Produto> root = criteria.from(Produto.class);
-//
-//        Predicate[] predicates = criarRestricoes(filter, builder, root);
-//        criteria.where(predicates);
-//
-//        TypedQuery<Produto> typedQuery = em.createQuery(criteria);
-//        adicionarRestricoesDePaginacao(typedQuery, pageable);
-//
-//        return new PageImpl<>(typedQuery.getResultList(), pageable, total(filter));
-//    }
-    private void adicionarRestricoesDePaginacao(TypedQuery<Produto> query, Pageable pageable) {
-        int paginaAtual = pageable.getPageNumber();
-        int totalResticoesPorPagina = pageable.getPageSize();
-        int primeiroResgistroDaPagina = paginaAtual * totalResticoesPorPagina;
-        query.setFirstResult(primeiroResgistroDaPagina);
-        query.setMaxResults(totalResticoesPorPagina);
-
-    }
-
     private Predicate[] criarRestricoes(ProdutoFilter filter, CriteriaBuilder builder, Root<Produto> root) {
 
         List<Predicate> predicates = new ArrayList<>();
-
-//        CriteriaQuery<Produto> query = builder.createQuery(Produto.class);
-//        Root<Produto> p = query.from(Produto.class);
-//        Fetch<Produto, SubCategoria> subCategoria = root.fetch("subCategoria", JoinType.LEFT);
-//        Fetch<Produto, Promocao> promocao = root.fetch("promocao", JoinType.LEFT);
-//        Fetch<Produto, Marca> marca = root.fetch("marca", JoinType.LEFT);
-//        Fetch<Produto, Loja> loja = root.fetch("loja", JoinType.LEFT);
-//        Fetch<Produto, Estoque> estoque = root.fetch("estoque", JoinType.LEFT);
         Path<String> nomeProduto = root.<String>get("nome");
         Path<Long> subCategoriaIdPath = root.join("subCategoria").<Long>get("id");
+        Path<Long> marcaIdPath = root.join("marca").<Long>get("id");
+        Path<Long> lojaIdPath = root.join("loja").<Long>get("id");
         Path<Long> promocaoIdPath = root.join("promocao").<Long>get("id");
         Path<BigDecimal> valorProduto = root.join("estoque").<BigDecimal>get("valorVenda");
 
@@ -244,13 +214,23 @@ public class ProdutoService implements ProdutoServiceImpl {
             predicates.add(paramentro);
         }
 
-        if (filter.getPromocao() != null) {
-            Predicate paramentro = builder.le(promocaoIdPath, filter.getPromocao());
+        if (filter.getSubCategoria() != null) {
+            Predicate paramentro = builder.equal(subCategoriaIdPath, filter.getSubCategoria());
             predicates.add(paramentro);
         }
 
-        if (filter.getSubCategoria() != null) {
-            Predicate paramentro = builder.le(subCategoriaIdPath, filter.getSubCategoria());
+        if (filter.getMarca() != null) {
+            Predicate paramentro = builder.equal(marcaIdPath, filter.getMarca());
+            predicates.add(paramentro);
+        }
+
+        if (filter.getPromocao() != null) {
+            Predicate paramentro = builder.equal(promocaoIdPath, filter.getPromocao());
+            predicates.add(paramentro);
+        }
+
+        if (filter.getLoja() != null) {
+            Predicate paramentro = builder.equal(lojaIdPath, filter.getLoja());
             predicates.add(paramentro);
         }
 
@@ -260,17 +240,5 @@ public class ProdutoService implements ProdutoServiceImpl {
         }
 
         return predicates.toArray(new Predicate[predicates.size()]);
-    }
-
-    private Long total(ProdutoFilter filter) {
-        CriteriaBuilder builder = em.getCriteriaBuilder();
-        CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
-        Root<Produto> root = criteria.from(Produto.class);
-
-        Predicate[] predicates = criarRestricoes(filter, builder, root);
-        criteria.where(predicates);
-
-        criteria.select(builder.count(root));
-        return em.createQuery(criteria).getSingleResult();
     }
 }

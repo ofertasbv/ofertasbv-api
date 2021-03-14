@@ -5,14 +5,11 @@
  */
 package com.br.oferta.api.service.serviceImpl;
 
-import com.br.oferta.api.model.Categoria;
 import com.br.oferta.api.model.Promocao;
 import com.br.oferta.api.util.filter.PromocaoFilter;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 /**
@@ -23,7 +20,7 @@ public interface PromocaoServiceImpl {
 
     List<Promocao> findBySort();
 
-    Page<Promocao> filtrar(PromocaoFilter filtro, Pageable pageable);
+    List<Promocao> filtrar(PromocaoFilter filtro);
 
     Optional<Promocao> findById(Long id);
 

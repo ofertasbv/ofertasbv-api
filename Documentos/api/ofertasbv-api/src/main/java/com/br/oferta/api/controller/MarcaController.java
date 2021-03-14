@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.br.oferta.api.util.event.RecursoCriadoEvent;
 import com.br.oferta.api.model.Marca;
 import com.br.oferta.api.service.MarcaService;
-import com.br.oferta.api.util.upload.FileStorageService;
 import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +55,13 @@ public class MarcaController {
     public ResponseEntity<Marca> findById(@PathVariable Long id) {
         Optional<Marca> arquivo = marcaService.findById(id);
         return arquivo.isPresent() ? ResponseEntity.ok(arquivo.get()) : ResponseEntity.notFound().build();
+    }
+    
+    @CrossOrigin(maxAge = 10, allowCredentials = "false") //origins = "http://localhost:8080/categorias")
+    @GetMapping("/nome/{nome}")
+//    @PreAuthorize("hasAuthority('ROLE_PESQUISAR') and #oauth2.hasScope('read')")
+    public List<Marca> findAllByNome(@PathVariable String nome) {
+        return marcaService.findByNome(nome);
     }
 
     @PostMapping("/create")

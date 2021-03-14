@@ -5,7 +5,6 @@
  */
 package com.br.oferta.api.service.serviceImpl;
 
-import com.br.oferta.api.model.Arquivo;
 import com.br.oferta.api.model.Marca;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +19,8 @@ public interface MarcaServiceImpl {
     List<Marca> findBySort();
 
     Optional<Marca> findById(Long id);
+    
+    List<Marca> findByNome(String nome);
 
     Marca create(Marca m);
 

@@ -52,7 +52,7 @@ public class Estoque implements Serializable {
 
     @NotNull(message = "Valor unitário é obrigatório")
     @DecimalMin(value = "0.50", message = "O valor unitár do produto deve ser maior que R$0,00")
-    @DecimalMax(value = "9999999.99", message = "O valor do produto deve ser menor que R$9.999.999,99")
+//    @DecimalMax(value = "9999999.99", message = "O valor do produto deve ser menor que R$9.999.999,99")
     @Column(name = "valor_unitario", nullable = false)
     private BigDecimal valorUnitario;
 
@@ -63,7 +63,7 @@ public class Estoque implements Serializable {
 
     @NotNull(message = "Valor de venda é obrigatório")
     @DecimalMin(value = "0.50", message = "O valor de venda do produto deve ser maior que R$0,00")
-    @DecimalMax(value = "9999999.99", message = "O valor de venda do produto deve ser menor que R$9.999.999,99")
+//    @DecimalMax(value = "9999999.99", message = "O valor de venda do produto deve ser menor que R$9.999.999,99")
     @Column(name = "valor_venda", nullable = false)
     private BigDecimal valorVenda;
 

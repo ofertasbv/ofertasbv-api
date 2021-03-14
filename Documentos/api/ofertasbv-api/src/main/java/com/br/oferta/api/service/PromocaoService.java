@@ -5,7 +5,6 @@
  */
 package com.br.oferta.api.service;
 
-import com.br.oferta.api.model.Categoria;
 import com.br.oferta.api.service.serviceImpl.PromocaoServiceImpl;
 import com.br.oferta.api.model.Promocao;
 import com.br.oferta.api.repository.PromocaoRepository;
@@ -14,10 +13,8 @@ import com.br.oferta.api.util.filter.PromocaoFilter;
 import com.br.oferta.api.util.paginacao.PaginacaoUtil;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
+import javax.persistence.criteria.Path;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,24 +26,14 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 /**
  *
@@ -63,7 +50,7 @@ public class PromocaoService implements PromocaoServiceImpl {
     private final EntityManager em;
 
     @Value("${contato.disco.raiz}")
-    private Path local;
+    private java.nio.file.Path local;
 
     private static final Logger logger = LoggerFactory.getLogger(PromocaoService.class);
 
@@ -148,51 +135,49 @@ public class PromocaoService implements PromocaoServiceImpl {
         return query.getResultList();
     }
 
-    private Long total(PromocaoFilter filtro) {
-        Criteria criteria = em.unwrap(Session.class).createCriteria(Promocao.class);
-        adicionarFiltro(filtro, criteria);
-        criteria.setProjection(Projections.rowCount());
-        return (Long) criteria.uniqueResult();
-    }
-
     @Override
-    @Transactional(readOnly = true)
-    public Page<Promocao> filtrar(PromocaoFilter filtro, Pageable pageable) {
-        Criteria criteria = em.unwrap(Session.class).createCriteria(Promocao.class);
+    public List<Promocao> filtrar(PromocaoFilter filtro) {
+        CriteriaBuilder builder = em.getCriteriaBuilder();
+        CriteriaQuery<Promocao> criteria = builder.createQuery(Promocao.class);
+        Root<Promocao> root = criteria.from(Promocao.class);
 
-        paginacaoUtil.preparar(criteria, pageable);
-        adicionarFiltro(filtro, criteria);
+        Predicate[] predicates = criarRestricoes(filtro, builder, root);
+        criteria.where(predicates);
 
-        return new PageImpl<>(criteria.list(), pageable, total(filtro));
+        TypedQuery<Promocao> typedQuery = em.createQuery(criteria);
+
+        return typedQuery.getResultList();
     }
 
-    private void adicionarFiltro(PromocaoFilter filtro, Criteria criteria) {
-        criteria.createAlias("loja", "l");
+    private Predicate[] criarRestricoes(PromocaoFilter filter, CriteriaBuilder builder, Root<Promocao> root) {
 
-        if (filtro != null) {
+        List<Predicate> predicates = new ArrayList<>();
+        Path<String> nomePath = root.<String>get("nome");
+        Path<LocalDate> dataRegistroPath = root.<LocalDate>get("dataRegistro");
+        Path<Long> promocaoTipoPath = root.join("promocaoTipo").<Long>get("id");
+        Path<Long> lojaIdPath = root.join("loja").<Long>get("id");
 
-            if (!StringUtils.isEmpty(filtro.getId())) {
-                criteria.add(Restrictions.eq("id", filtro.getId()));
-            }
-
-            if (!StringUtils.isEmpty(filtro.getNome())) {
-                criteria.add(Restrictions.ilike("nome", filtro.getNome(), MatchMode.ANYWHERE));
-            }
-
-            if (filtro.getLoja() != null) {
-                criteria.add(Restrictions.ilike("l.nome", filtro.getLoja(), MatchMode.ANYWHERE));
-            }
-
-            if (filtro.getInicio() != null) {
-                LocalDateTime desde = LocalDateTime.of(filtro.getInicio(), LocalTime.of(0, 0));
-                criteria.add(Restrictions.ge("dataRegistro", desde));
-            }
-
-            if (filtro.getEncerramento() != null) {
-                LocalDateTime ate = LocalDateTime.of(filtro.getEncerramento(), LocalTime.of(23, 59));
-                criteria.add(Restrictions.le("dataRegistro", ate));
-            }
+        if (filter.getNomePromocao() != null) {
+            Predicate paramentro = builder.like(builder.lower(nomePath), "%" + filter.getNomePromocao() + "%");
+            predicates.add(paramentro);
         }
+
+        if (filter.getLoja() != null) {
+            Predicate paramentro = builder.equal(lojaIdPath, filter.getLoja());
+            predicates.add(paramentro);
+        }
+
+        if (filter.getPromocaoTipo() != null) {
+            Predicate paramentro = builder.equal(promocaoTipoPath, filter.getPromocaoTipo());
+            predicates.add(paramentro);
+        }
+
+        if (filter.getDataInicio() != null & filter.getDataFinal() != null) {
+            Predicate paramentro = builder.between(dataRegistroPath, filter.getDataInicio(), filter.getDataFinal());
+            predicates.add(paramentro);
+        }
+
+        return predicates.toArray(new Predicate[predicates.size()]);
     }
 
     @Override

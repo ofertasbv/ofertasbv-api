@@ -5,15 +5,22 @@
  */
 package com.br.oferta.api.service;
 
+import com.br.oferta.api.model.Categoria;
 import com.br.oferta.api.model.Marca;
 import com.br.oferta.api.repository.MarcaRepository;
 import com.br.oferta.api.service.serviceImpl.MarcaServiceImpl;
 import com.br.oferta.api.util.error.ServiceNotFoundExeception;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -47,6 +54,27 @@ public class MarcaService implements MarcaServiceImpl {
     @Override
     public Optional<Marca> findById(Long id) {
         return marcaRepository.findById(id);
+    }
+
+    @Override
+    public List<Marca> findByNome(String nome) {
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<Marca> query = criteriaBuilder.createQuery(Marca.class);
+        Root<Marca> n = query.from(Marca.class);
+
+        javax.persistence.criteria.Path<String> nomePath = n.<String>get("nome");
+        List<Predicate> predicates = new ArrayList<>();
+
+        if (nome != null) {
+            Predicate paramentro = criteriaBuilder.like(criteriaBuilder.lower(nomePath), "%" + nome.toLowerCase() + "%");
+            predicates.add(paramentro);
+        }
+
+        query.where((Predicate[]) predicates.toArray(new Predicate[0]));
+        query.orderBy(criteriaBuilder.desc(n.get("id")));
+        TypedQuery<Marca> typedQuery = em.createQuery(query);
+
+        return typedQuery.getResultList();
     }
 
     @Override

@@ -14,10 +14,11 @@ import java.time.LocalDate;
 public class PromocaoFilter {
 
     private Long id;
-    private String nome;
-    private String loja;
-    private LocalDate inicio;
-    private LocalDate encerramento;
+    private String nomePromocao;
+    private Long promocaoTipo;
+    private Long loja;
+    private LocalDate dataInicio;
+    private LocalDate dataFinal;
 
     public Long getId() {
         return id;
@@ -27,35 +28,44 @@ public class PromocaoFilter {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getNomePromocao() {
+        return nomePromocao;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setNomePromocao(String nomePromocao) {
+        this.nomePromocao = nomePromocao;
     }
 
-    public String getLoja() {
+    public Long getPromocaoTipo() {
+        return promocaoTipo;
+    }
+
+    public void setPromocaoTipo(Long promocaoTipo) {
+        this.promocaoTipo = promocaoTipo;
+    }
+
+    public Long getLoja() {
         return loja;
     }
 
-    public void setLoja(String loja) {
+    public void setLoja(Long loja) {
         this.loja = loja;
     }
 
-    public LocalDate getInicio() {
-        return inicio;
+    public LocalDate getDataInicio() {
+        return dataInicio;
     }
 
-    public void setInicio(LocalDate inicio) {
-        this.inicio = inicio;
+    public void setDataInicio(LocalDate dataInicio) {
+        this.dataInicio = dataInicio;
     }
 
-    public LocalDate getEncerramento() {
-        return encerramento;
+    public LocalDate getDataFinal() {
+        return dataFinal;
     }
 
-    public void setEncerramento(LocalDate encerramento) {
-        this.encerramento = encerramento;
+    public void setDataFinal(LocalDate dataFinal) {
+        this.dataFinal = dataFinal;
     }
+
 }

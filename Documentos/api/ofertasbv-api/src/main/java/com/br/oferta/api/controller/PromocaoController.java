@@ -1,6 +1,5 @@
 package com.br.oferta.api.controller;
 
-import com.br.oferta.api.model.Produto;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,9 +33,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -79,9 +75,8 @@ public class PromocaoController {
 
     @GetMapping("/filter")
 //    @PreAuthorize("hasAuthority('ROLE_PESQUISAR') and #oauth2.hasScope('read')")
-    public Page<Promocao> findByFilter(PromocaoFilter filter, @PageableDefault(size = 10) Pageable pageable) {
-//        PageWrapper<Promocao> paginaWrapper = new PageWrapper<>(PromocaoFilter.filtrar(filter, pageable), httpServletRequest);
-        return promocaoService.filtrar(filter, pageable);
+    public List<Promocao> findByFilter(PromocaoFilter filter) {
+        return promocaoService.filtrar(filter);
     }
 
     @PostMapping("/create")
