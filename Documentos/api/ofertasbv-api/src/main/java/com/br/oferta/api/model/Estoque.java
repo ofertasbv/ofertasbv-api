@@ -8,7 +8,10 @@ package com.br.oferta.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.time.LocalDate;
+import java.util.Locale;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -44,7 +47,6 @@ public class Estoque implements Serializable {
 //
 //    @Column(name = "data_vencimento")
 //    private LocalDate dataVencimento;
-
     @NotNull(message = "A quantidade em estoque é obrigatória")
     @Max(value = 9999, message = "A quantidade em estoque deve ser menor que 9.999")
     @Column(name = "quantidade", nullable = false)
@@ -99,7 +101,6 @@ public class Estoque implements Serializable {
 //    public void setDataVencimento(LocalDate dataVencimento) {
 //        this.dataVencimento = dataVencimento;
 //    }
-
     public Integer getQuantidade() {
         return quantidade;
     }
@@ -109,6 +110,9 @@ public class Estoque implements Serializable {
     }
 
     public BigDecimal getValorUnitario() {
+        Locale locale = new Locale("pt", "Brasil");
+        NumberFormat format = NumberFormat.getInstance(locale);
+        DecimalFormat resultado = new DecimalFormat();  
         return valorUnitario;
     }
 
