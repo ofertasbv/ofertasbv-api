@@ -19,6 +19,7 @@ public class PromocaoFilter {
     private Long loja;
     private LocalDate dataInicio;
     private LocalDate dataFinal;
+    private Boolean status;
 
     public Long getId() {
         return id;
@@ -68,4 +69,11 @@ public class PromocaoFilter {
         this.dataFinal = dataFinal;
     }
 
+    public Boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
 }

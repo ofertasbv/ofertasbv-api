@@ -192,6 +192,7 @@ public class ProdutoService implements ProdutoServiceImpl {
         Root<Produto> root = criteria.from(Produto.class);
 
         Predicate[] predicates = criarRestricoes(filter, builder, root);
+        criteria.orderBy(builder.asc(root.get("id")));
         criteria.where(predicates);
 
         TypedQuery<Produto> typedQuery = em.createQuery(criteria);

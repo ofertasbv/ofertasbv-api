@@ -3,7 +3,7 @@ package com.br.oferta.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -25,7 +25,7 @@ import javax.validation.constraints.NotNull;
 @SuppressWarnings("PersistenceUnitPresent")
 public class CaixaFluxo implements Serializable {
 
-    private static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,30 +37,30 @@ public class CaixaFluxo implements Serializable {
 
     @NotNull(message = "Saldo anterior é obrigatório")
     @DecimalMax(value = "9999999.99", message = "Saldo anterior deve ser menor que R$9.999.999,99")
-    @Column(name = "saldo_anterior")
+    @Column(name = "saldo_anterior", precision = 10, scale = 2)
     private BigDecimal saldoAnterior;
 
     @NotNull(message = "Valor da entrada é obrigatório")
     @DecimalMin(value = "0.50", message = "O valor da entrada deve ser maior que R$0,00")
     @DecimalMax(value = "9999999.99", message = "O valor da entrada deve ser menor que R$9.999.999,99")
-    @Column(name = "valor_entrada")
+    @Column(name = "valor_entrada", precision = 10, scale = 2)
     private BigDecimal valorEntrada;
 
     @NotNull(message = "Valor da saida é obrigatório")
     @DecimalMin(value = "0.50", message = "O valor da saida deve ser maior que R$0,00")
     @DecimalMax(value = "9999999.99", message = "O valor da saida deve ser menor que R$9.999.999,99")
-    @Column(name = "valor_saida")
+    @Column(name = "valor_saida", precision = 10, scale = 2)
     private BigDecimal valorSaida;
 
     @NotNull(message = "Valor total é obrigatório")
     @DecimalMin(value = "0.50", message = "O valor da saida deve ser maior que R$0,00")
     @DecimalMax(value = "9999999.99", message = "O valor da saida deve ser menor que R$9.999.999,99")
-    @Column(name = "valor_total")
+    @Column(name = "valor_total", precision = 10, scale = 2)
     private BigDecimal valorTotal;
 
     @NotNull(message = "A data de registro é obrigatória")
     @Column(name = "data_registro")
-    private LocalDateTime dataRegistro;
+    private LocalDate dataRegistro;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "caixa_status", nullable = false)
@@ -156,11 +156,11 @@ public class CaixaFluxo implements Serializable {
         this.valorTotal = valorTotal;
     }
 
-    public LocalDateTime getDataRegistro() {
+    public LocalDate getDataRegistro() {
         return dataRegistro;
     }
 
-    public void setDataRegistro(LocalDateTime dataRegistro) {
+    public void setDataRegistro(LocalDate dataRegistro) {
         this.dataRegistro = dataRegistro;
     }
 

@@ -85,7 +85,7 @@ public class Pedido implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "pagamento_id", nullable = false, foreignKey = @ForeignKey(name = "fk_pedido_pagamento"))
-    private Pagamento pagamento = new Pagamento();
+    private Pagamento pagamento;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "pedido_status", nullable = false)

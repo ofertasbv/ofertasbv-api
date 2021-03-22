@@ -48,6 +48,9 @@ public class Promocao implements Serializable {
     @Column(name = "desconto", nullable = false)
     private BigDecimal desconto = BigDecimal.ZERO;
 
+    @Column(name = "status")
+    private boolean status;
+
     @NotNull(message = "A data de registro é obrigatório")
     @Column(name = "data_registro", nullable = false)
     private LocalDate dataRegistro;
@@ -72,6 +75,36 @@ public class Promocao implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "loja_id", foreignKey = @ForeignKey(name = "fk_promocao_loja"))
     private Loja loja;
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Promocao other = (Promocao) obj;
+        if (getId() == null) {
+            if (other.getId() != null) {
+                return false;
+            }
+        } else if (!id.equals(other.id)) {
+            return false;
+        }
+        return true;
+    }
 
     public Long getId() {
         return id;
@@ -161,33 +194,11 @@ public class Promocao implements Serializable {
         this.loja = loja;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        return result;
+    public boolean isStatus() {
+        return status;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        Promocao other = (Promocao) obj;
-        if (getId() == null) {
-            if (other.getId() != null) {
-                return false;
-            }
-        } else if (!id.equals(other.id)) {
-            return false;
-        }
-        return true;
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }

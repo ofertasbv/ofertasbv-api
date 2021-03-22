@@ -136,6 +136,13 @@ public class PromocaoService implements PromocaoServiceImpl {
     }
 
     @Override
+    public List<Promocao> findByStatus(boolean status) {
+        Query query = em.createQuery("SELECT p FROM Promocao p WHERE p.status =:status");
+        query.setParameter("status", status);
+        return query.getResultList();
+    }
+
+    @Override
     public List<Promocao> filtrar(PromocaoFilter filtro) {
         CriteriaBuilder builder = em.getCriteriaBuilder();
         CriteriaQuery<Promocao> criteria = builder.createQuery(Promocao.class);
@@ -153,12 +160,18 @@ public class PromocaoService implements PromocaoServiceImpl {
 
         List<Predicate> predicates = new ArrayList<>();
         Path<String> nomePath = root.<String>get("nome");
+        Path<Boolean> statusPath = root.<Boolean>get("status");
         Path<LocalDate> dataRegistroPath = root.<LocalDate>get("dataRegistro");
         Path<Long> promocaoTipoPath = root.join("promocaoTipo").<Long>get("id");
         Path<Long> lojaIdPath = root.join("loja").<Long>get("id");
 
         if (filter.getNomePromocao() != null) {
-            Predicate paramentro = builder.like(builder.lower(nomePath), "%" + filter.getNomePromocao() + "%");
+            Predicate paramentro = builder.like(builder.lower(nomePath), "%" + filter.getNomePromocao().toLowerCase() + "%");
+            predicates.add(paramentro);
+        }
+
+        if (filter.isStatus() != null) {
+            Predicate paramentro = builder.equal(statusPath, filter.isStatus());
             predicates.add(paramentro);
         }
 
@@ -200,4 +213,5 @@ public class PromocaoService implements PromocaoServiceImpl {
 
         return typedQuery.getResultList();
     }
+
 }

@@ -26,6 +26,8 @@ public interface PromocaoServiceImpl {
 
     List<Promocao> findByNome(String nome);
 
+    List<Promocao> findByStatus(boolean status);
+
     Promocao create(Promocao c);
 
     ResponseEntity update(Long id, Promocao c);
