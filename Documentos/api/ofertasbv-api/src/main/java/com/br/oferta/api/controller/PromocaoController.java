@@ -73,6 +73,13 @@ public class PromocaoController {
         return promocaoService.findByNome(nome);
     }
 
+    @CrossOrigin(maxAge = 10, allowCredentials = "false") //origins = "http://localhost:8080/categorias")
+    @GetMapping("/status/{status}")
+//    @PreAuthorize("hasAuthority('ROLE_PESQUISAR') and #oauth2.hasScope('read')")
+    public List<Promocao> findAllByStatus(@PathVariable boolean status) {
+        return promocaoService.findByStatus(status);
+    }
+
     @GetMapping("/filter")
 //    @PreAuthorize("hasAuthority('ROLE_PESQUISAR') and #oauth2.hasScope('read')")
     public List<Promocao> findByFilter(PromocaoFilter filter) {
