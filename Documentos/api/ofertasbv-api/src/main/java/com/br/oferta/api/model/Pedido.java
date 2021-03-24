@@ -8,9 +8,12 @@ package com.br.oferta.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -23,7 +26,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -47,11 +49,11 @@ public class Pedido implements Serializable {
 
     @NotNull(message = "Data registro é obrigatório")
     @Column(name = "data_criacao", nullable = false)
-    private LocalDateTime dataRegistro;
+    private LocalDate dataRegistro;
 
     @NotNull(message = "Data entrega é obrigatório")
     @Column(name = "data_hora_entrega", nullable = false)
-    private LocalDateTime dataHoraEntrega;
+    private LocalDate dataHoraEntrega;
 
     @NotNull(message = "Valor da entrega é obrigatório")
     @Column(name = "valor_frete", nullable = false, precision = 10, scale = 2)
@@ -70,7 +72,7 @@ public class Pedido implements Serializable {
     private BigDecimal valorTotal = BigDecimal.ZERO;
 
 //    @JsonIgnoreProperties({"produto"})
-    @OneToMany(mappedBy = "pedido", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "pedido", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<PedidoItem> pedidoItems = new ArrayList<>();
 
     @JsonIgnoreProperties({"enderecos", "usuario"})
@@ -83,13 +85,48 @@ public class Pedido implements Serializable {
     @JoinColumn(name = "loja_id", nullable = false, foreignKey = @ForeignKey(name = "fk_pedido_loja"))
     private Loja loja;
 
-    @OneToOne
-    @JoinColumn(name = "pagamento_id", nullable = false, foreignKey = @ForeignKey(name = "fk_pedido_pagamento"))
-    private Pagamento pagamento;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "pedido_status", nullable = false)
     private PedidoStatus pedidoStatus = PedidoStatus.CRIADO;
+
+    @OneToMany(mappedBy = "pedido")
+    private List<Pagamento> pagamentos;
+
+    public void adicionarItens(List<PedidoItem> itens) {
+        this.setPedidoItems(itens);
+        this.getPedidoItems().forEach(i -> i.setPedido(this));
+    }
+
+    public BigDecimal getValorTotalItens() {
+        return getPedidoItems().stream()
+                .map(PedidoItem::getValorTotal)
+                .reduce(BigDecimal::add)
+                .orElse(BigDecimal.ZERO);
+    }
+
+    public void calcularValorTotal() {
+        this.setValorTotal(calcularValorTotal(getValorTotalItens(), getValorFrete(), getValorDesconto()));
+    }
+
+    public Long getDiasCriacao() {
+        LocalDate inicio = getDataRegistro() != null ? getDataRegistro() : LocalDate.now();
+        return ChronoUnit.DAYS.between(inicio, LocalDate.now());
+    }
+
+    public boolean isSalvarPermitido() {
+        return !pedidoStatus.equals(PedidoStatus.CANCELADO);
+    }
+
+    public boolean isSalvarProibido() {
+        return !isSalvarPermitido();
+    }
+
+    private BigDecimal calcularValorTotal(BigDecimal valorTotalItens, BigDecimal valorFrete, BigDecimal valorDesconto) {
+        BigDecimal total = valorTotalItens
+                .add(Optional.ofNullable(valorFrete).orElse(BigDecimal.ZERO))
+                .subtract(Optional.ofNullable(valorDesconto).orElse(BigDecimal.ZERO));
+        return total;
+    }
 
     public Long getId() {
         return id;
@@ -107,19 +144,19 @@ public class Pedido implements Serializable {
         this.descricao = descricao;
     }
 
-    public LocalDateTime getDataRegistro() {
+    public LocalDate getDataRegistro() {
         return dataRegistro;
     }
 
-    public void setDataRegistro(LocalDateTime dataRegistro) {
+    public void setDataRegistro(LocalDate dataRegistro) {
         this.dataRegistro = dataRegistro;
     }
 
-    public LocalDateTime getDataHoraEntrega() {
+    public LocalDate getDataHoraEntrega() {
         return dataHoraEntrega;
     }
 
-    public void setDataHoraEntrega(LocalDateTime dataHoraEntrega) {
+    public void setDataHoraEntrega(LocalDate dataHoraEntrega) {
         this.dataHoraEntrega = dataHoraEntrega;
     }
 
@@ -179,14 +216,6 @@ public class Pedido implements Serializable {
         this.loja = loja;
     }
 
-    public Pagamento getPagamento() {
-        return pagamento;
-    }
-
-    public void setPagamento(Pagamento pagamento) {
-        this.pagamento = pagamento;
-    }
-
     public PedidoStatus getPedidoStatus() {
         return pedidoStatus;
     }
@@ -195,39 +224,12 @@ public class Pedido implements Serializable {
         this.pedidoStatus = pedidoStatus;
     }
 
-    //    public void adicionarItens(List<PedidoItem> itens) {
-//        this.setPedidoItems(itens);
-//        this.getPedidoItems().forEach(i -> i.setPedido(this));
-//    }
-//
-//    public BigDecimal getValorTotalItens() {
-//        return getPedidoItems().stream()
-//                .map(PedidoItem::getValorTotal)
-//                .reduce(BigDecimal::add)
-//                .orElse(BigDecimal.ZERO);
-//    }
-//
-//    public void calcularValorTotal() {
-//        this.setValorTotal(calcularValorTotal(getValorTotalItens(), getValorFrete(), getValorDesconto()));
-//    }
-//
-//    public Long getDiasCriacao() {
-//        LocalDate inicio = getDataRegistro() != null ? getDataRegistro().toLocalDate() : LocalDate.now();
-//        return ChronoUnit.DAYS.between(inicio, LocalDate.now());
-//    }
-//
-//    public boolean isSalvarPermitido() {
-//        return !pedidoStatus.equals(PedidoStatus.CANCELADA);
-//    }
-//
-//    public boolean isSalvarProibido() {
-//        return !isSalvarPermitido();
-//    }
-//
-//    private BigDecimal calcularValorTotal(BigDecimal valorTotalItens, BigDecimal valorFrete, BigDecimal valorDesconto) {
-//        BigDecimal total = valorTotalItens
-//                .add(Optional.ofNullable(valorFrete).orElse(BigDecimal.ZERO))
-//                .subtract(Optional.ofNullable(valorDesconto).orElse(BigDecimal.ZERO));
-//        return total;
-//    }
+    public List<Pagamento> getPagamentos() {
+        return pagamentos;
+    }
+
+    public void setPagamentos(List<Pagamento> pagamentos) {
+        this.pagamentos = pagamentos;
+    }
+
 }

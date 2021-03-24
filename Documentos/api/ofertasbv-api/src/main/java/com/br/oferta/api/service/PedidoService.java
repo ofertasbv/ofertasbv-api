@@ -51,6 +51,7 @@ public class PedidoService implements PedidoServiceImpl {
 
     @Override
     public Pedido create(Pedido p) {
+        p.adicionarItens(p.getPedidoItems());
         return pedidoRepository.saveAndFlush(p);
     }
 

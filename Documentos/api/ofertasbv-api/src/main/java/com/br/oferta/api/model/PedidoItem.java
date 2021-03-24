@@ -5,12 +5,10 @@
  */
 package com.br.oferta.api.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
@@ -22,7 +20,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
-import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  *
@@ -50,14 +47,9 @@ public class PedidoItem implements Serializable {
 
     @NotNull(message = "A qauntidade é obrigatório")
     @Column(name = "quantidade", nullable = false, length = 3)
-    private Integer quantidade = 1;
+    private Integer quantidade;
 
-    @Column(name = "data_registro", nullable = false)
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    @JsonFormat(pattern = "dd-MM-yyyy")
-    private LocalDate dataRegistro;
-
-    @JsonIgnore
+    @JsonIgnoreProperties({"pedidoItems", "loja", "cliente"})
     @ManyToOne()
     @JoinColumn(name = "pedido_id", foreignKey = @ForeignKey(name = "fk_pedidoitem_pedido"), nullable = false)
     private Pedido pedido;
@@ -68,7 +60,7 @@ public class PedidoItem implements Serializable {
     private Produto produto;
 
     @ManyToOne
-    @JoinColumn(name = "tamanho_id", foreignKey = @ForeignKey(name = "fk_pedidoitem_tamanho"), nullable = false)
+    @JoinColumn(name = "tamanho_id", foreignKey = @ForeignKey(name = "fk_pedidoitem_tamanho"), nullable = true)
     private Tamanho tamanho;
 
     @Transient
@@ -147,14 +139,6 @@ public class PedidoItem implements Serializable {
 
     public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
-    }
-
-    public LocalDate getDataRegistro() {
-        return dataRegistro;
-    }
-
-    public void setDataRegistro(LocalDate dataRegistro) {
-        this.dataRegistro = dataRegistro;
     }
 
     public Pedido getPedido() {

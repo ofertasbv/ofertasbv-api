@@ -19,9 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.br.oferta.api.util.event.RecursoCriadoEvent;
-import com.br.oferta.api.model.Tamanho;
 import com.br.oferta.api.service.PagamentoService;
-import com.br.oferta.api.service.TamanhoService;
 import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

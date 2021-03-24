@@ -16,9 +16,12 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.DecimalMax;
@@ -68,6 +71,41 @@ public class Pagamento implements Serializable {
     @OneToMany(mappedBy = "pagamento", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Parcela> parcelas;
 
+    @JsonIgnoreProperties({"pagamentos", "cliente", "loja"})
+    @ManyToOne
+    @JoinColumn(name = "pedido_id", nullable = false, foreignKey = @ForeignKey(name = "fk_pagamento_pedido"))
+    private Pedido pedido;
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Pagamento other = (Pagamento) obj;
+        if (getId() == null) {
+            if (other.getId() != null) {
+                return false;
+            }
+        } else if (!id.equals(other.id)) {
+            return false;
+        }
+        return true;
+    }
+
     public Long getId() {
         return id;
     }
@@ -100,20 +138,20 @@ public class Pagamento implements Serializable {
         this.dataPagamento = dataPagamento;
     }
 
-    public PagamentoForma getPagamentoForma() {
-        return pagamentoForma;
-    }
-
-    public void setPagamentoForma(PagamentoForma pagamentoForma) {
-        this.pagamentoForma = pagamentoForma;
-    }
-
     public PagamentoTipo getPagamentoTipo() {
         return pagamentoTipo;
     }
 
     public void setPagamentoTipo(PagamentoTipo pagamentoTipo) {
         this.pagamentoTipo = pagamentoTipo;
+    }
+
+    public PagamentoForma getPagamentoForma() {
+        return pagamentoForma;
+    }
+
+    public void setPagamentoForma(PagamentoForma pagamentoForma) {
+        this.pagamentoForma = pagamentoForma;
     }
 
     public List<Parcela> getParcelas() {
@@ -124,34 +162,12 @@ public class Pagamento implements Serializable {
         this.parcelas = parcelas;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        return result;
+    public Pedido getPedido() {
+        return pedido;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        Pagamento other = (Pagamento) obj;
-        if (getId() == null) {
-            if (other.getId() != null) {
-                return false;
-            }
-        } else if (!id.equals(other.id)) {
-            return false;
-        }
-        return true;
+    public void setPedido(Pedido pedido) {
+        this.pedido = pedido;
     }
 
 }
