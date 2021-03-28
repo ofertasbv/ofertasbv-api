@@ -2,7 +2,6 @@ package com.br.oferta.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -62,11 +61,6 @@ public class Produto implements Serializable {
     @Column(name = "destaque")
     private boolean destaque;
 
-    @NotNull(message = "A medida é obrigatória")
-    @Enumerated(EnumType.STRING)
-    private Medida medida = Medida.OUTRO;
-
-    @NotNull(message = "A origem é obrigatória")
     @Enumerated(EnumType.STRING)
     private Origem origem;
 
@@ -74,6 +68,11 @@ public class Produto implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "subcategoria_id", foreignKey = @ForeignKey(name = "fk_produto_subcategoria"))
     private SubCategoria subCategoria;
+
+    @JsonIgnoreProperties({"produtos"})
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "medida_id", foreignKey = @ForeignKey(name = "fk_produto_medida"))
+    private Medida medida;
 
     @JsonIgnoreProperties({"produtos", "loja"})
     @ManyToOne(fetch = FetchType.EAGER)
@@ -117,6 +116,11 @@ public class Produto implements Serializable {
             inverseForeignKey = @ForeignKey(name = "fk_cor_id"))
     private List<Cor> cores = new ArrayList<>();
 
+//    
+//     public void adicionarCores(List<Cor> cores) {
+//        this.setCores(cores);
+//        this.getCores().forEach(i -> i.(this));
+//    }
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -186,7 +190,7 @@ public class Produto implements Serializable {
     public void setFoto(String foto) {
         this.foto = foto;
     }
-    
+
     public String getCodigoBarra() {
         return codigoBarra;
     }
@@ -298,4 +302,5 @@ public class Produto implements Serializable {
     public void setCores(List<Cor> cores) {
         this.cores = cores;
     }
+
 }
