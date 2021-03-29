@@ -1,5 +1,6 @@
 package com.br.oferta.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -42,10 +43,12 @@ public class CaixaFluxoEntrada implements Serializable {
     @Column(name = "data_registro")
     private LocalDateTime dataRegistro;
 
+    @JsonIgnoreProperties({"caixa", "vendedor"})
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "caixafluxo_id", foreignKey = @ForeignKey(name = "fk_caixa_fluxo_entrada_caixa_fluxo"))
     private CaixaFluxo caixaFluxo;
 
+    @JsonIgnoreProperties({"cliente", "loja", "pagamentos", "pedidoItems"})
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "pedido_id", foreignKey = @ForeignKey(name = "fk_caixa_fluxo_entrada_pedido"))
     private Pedido pedido;
