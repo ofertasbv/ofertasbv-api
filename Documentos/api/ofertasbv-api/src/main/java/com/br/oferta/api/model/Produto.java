@@ -74,7 +74,7 @@ public class Produto implements Serializable {
     @JoinColumn(name = "medida_id", foreignKey = @ForeignKey(name = "fk_produto_medida"))
     private Medida medida;
 
-    @JsonIgnoreProperties({"produtos", "loja"})
+    @JsonIgnoreProperties({"produtos", "loja", "promocaoTipo"})
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "promocao_id", foreignKey = @ForeignKey(name = "fk_produto_promocao"))
     private Promocao promocao;

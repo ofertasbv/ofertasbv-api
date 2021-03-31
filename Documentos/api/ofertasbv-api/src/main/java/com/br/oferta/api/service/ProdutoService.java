@@ -13,6 +13,7 @@ import com.br.oferta.api.util.filter.ProdutoFilter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -209,6 +210,7 @@ public class ProdutoService implements ProdutoServiceImpl {
         Path<Long> lojaIdPath = root.join("loja").<Long>get("id");
         Path<Long> promocaoIdPath = root.join("promocao").<Long>get("id");
         Path<BigDecimal> valorProduto = root.join("estoque").<BigDecimal>get("valorVenda");
+        Path<LocalDate> dataRegistroPath = root.join("estoque").<LocalDate>get("dataRegistro");
 
         if (filter.getNomeProduto() != null) {
             Predicate paramentro = builder.like(builder.lower(nomeProduto), "%" + filter.getNomeProduto() + "%");
@@ -237,6 +239,11 @@ public class ProdutoService implements ProdutoServiceImpl {
 
         if (filter.getValorMinimo() != null & filter.getValorMaximo() != null) {
             Predicate paramentro = builder.between(valorProduto, filter.getValorMinimo(), filter.getValorMaximo());
+            predicates.add(paramentro);
+        }
+
+        if (filter.getDataRegistro() != null) {
+            Predicate paramentro = builder.equal(dataRegistroPath, filter.getDataRegistro());
             predicates.add(paramentro);
         }
 

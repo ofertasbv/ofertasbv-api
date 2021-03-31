@@ -20,6 +20,8 @@ public interface PedidoItemServiceImpl {
 
     Optional<PedidoItem> findById(Long id);
 
+    List<PedidoItem> findByNome(String nome);
+
     PedidoItem create(PedidoItem p);
 
     ResponseEntity update(Long id, PedidoItem p);

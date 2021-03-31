@@ -5,15 +5,21 @@
  */
 package com.br.oferta.api.service;
 
+import com.br.oferta.api.model.CaixaFluxoEntrada;
 import com.br.oferta.api.model.CaixaFluxoSaida;
 import com.br.oferta.api.repository.CaixaFluxoSaidaRepository;
 import com.br.oferta.api.service.serviceImpl.CaixaFluxoSaidaServiceImpl;
 import com.br.oferta.api.util.error.ServiceNotFoundExeception;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -47,6 +53,19 @@ public class CaixaFluxoSaidaService implements CaixaFluxoSaidaServiceImpl {
     @Override
     public Optional<CaixaFluxoSaida> findById(Long id) {
         return caixaFluxoRepository.findById(id);
+    }
+
+    @Override
+    public BigDecimal valorTotalByDataRegistro(LocalDate dataInicio, LocalDate dataFinal) {
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<BigDecimal> criteriaQuery = criteriaBuilder.createQuery(BigDecimal.class);
+
+        Root<CaixaFluxoSaida> root = criteriaQuery.from(CaixaFluxoSaida.class);
+        criteriaQuery.select(criteriaBuilder.sum(root.get("valorSaida")));
+        criteriaQuery.where(criteriaBuilder.between(root.get("dataRegistro"), dataInicio, dataFinal));
+        BigDecimal valorTotal = em.createQuery(criteriaQuery).getSingleResult();
+        em.close();
+        return valorTotal;
     }
 
     @Override

@@ -41,12 +41,13 @@ public class Estoque implements Serializable {
     @Column(name = "id")
     private Long id;
 
-//    @NotNull(message = "A data de registro é obrigatório")
-//    @Column(name = "data_registro", nullable = false)
-//    private LocalDate dataRegistro;
-//
-//    @Column(name = "data_vencimento")
-//    private LocalDate dataVencimento;
+    @NotNull(message = "A data de registro é obrigatório")
+    @Column(name = "data_registro", nullable = false)
+    private LocalDate dataRegistro;
+
+    @Column(name = "data_vencimento")
+    private LocalDate dataVencimento;
+
     @NotNull(message = "A quantidade em estoque é obrigatória")
     @Max(value = 9999, message = "A quantidade em estoque deve ser menor que 9.999")
     @Column(name = "quantidade", nullable = false)
@@ -54,7 +55,7 @@ public class Estoque implements Serializable {
 
     @NotNull(message = "Valor unitário é obrigatório")
     @DecimalMin(value = "0.50", message = "O valor unitár do produto deve ser maior que R$0,00")
-//    @DecimalMax(value = "9999999.99", message = "O valor do produto deve ser menor que R$9.999.999,99")
+    @DecimalMax(value = "9999999.99", message = "O valor do produto deve ser menor que R$9.999.999,99")
     @Column(name = "valor_unitario", nullable = false)
     private BigDecimal valorUnitario;
 
@@ -65,7 +66,7 @@ public class Estoque implements Serializable {
 
     @NotNull(message = "Valor de venda é obrigatório")
     @DecimalMin(value = "0.50", message = "O valor de venda do produto deve ser maior que R$0,00")
-//    @DecimalMax(value = "9999999.99", message = "O valor de venda do produto deve ser menor que R$9.999.999,99")
+    @DecimalMax(value = "9999999.99", message = "O valor de venda do produto deve ser menor que R$9.999.999,99")
     @Column(name = "valor_venda", nullable = false)
     private BigDecimal valorVenda;
 
@@ -78,6 +79,11 @@ public class Estoque implements Serializable {
     @OneToOne(mappedBy = "estoque")
     private Produto produto;
 
+    public BigDecimal calcularValorTotal() {
+        BigDecimal valorTotal = valorUnitario.add(percentual.divide(new BigDecimal(100)).multiply(valorUnitario));
+        return valorTotal;
+    }
+
     public Long getId() {
         return id;
     }
@@ -86,21 +92,22 @@ public class Estoque implements Serializable {
         this.id = id;
     }
 
-//    public LocalDate getDataRegistro() {
-//        return dataRegistro;
-//    }
-//
-//    public void setDataRegistro(LocalDate dataRegistro) {
-//        this.dataRegistro = dataRegistro;
-//    }
-//
-//    public LocalDate getDataVencimento() {
-//        return dataVencimento;
-//    }
-//
-//    public void setDataVencimento(LocalDate dataVencimento) {
-//        this.dataVencimento = dataVencimento;
-//    }
+    public LocalDate getDataRegistro() {
+        return dataRegistro;
+    }
+
+    public void setDataRegistro(LocalDate dataRegistro) {
+        this.dataRegistro = dataRegistro;
+    }
+
+    public LocalDate getDataVencimento() {
+        return dataVencimento;
+    }
+
+    public void setDataVencimento(LocalDate dataVencimento) {
+        this.dataVencimento = dataVencimento;
+    }
+
     public Integer getQuantidade() {
         return quantidade;
     }
@@ -112,7 +119,7 @@ public class Estoque implements Serializable {
     public BigDecimal getValorUnitario() {
         Locale locale = new Locale("pt", "Brasil");
         NumberFormat format = NumberFormat.getInstance(locale);
-        DecimalFormat resultado = new DecimalFormat();  
+        DecimalFormat resultado = new DecimalFormat();
         return valorUnitario;
     }
 
@@ -129,11 +136,11 @@ public class Estoque implements Serializable {
     }
 
     public BigDecimal getValorVenda() {
-        return valorVenda;
+        return valorVenda = calcularValorTotal();
     }
 
     public void setValorVenda(BigDecimal valorVenda) {
-        this.valorVenda = valorVenda;
+        this.valorVenda = calcularValorTotal();
     }
 
     public EstoqueStatus getEstoqueStatus() {

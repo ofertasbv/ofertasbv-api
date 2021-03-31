@@ -3,7 +3,7 @@ package com.br.oferta.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -41,7 +41,7 @@ public class CaixaFluxoSaida implements Serializable {
 
     @NotNull(message = "A data de registro é obrigatória")
     @Column(name = "data_registro")
-    private LocalDateTime dataRegistro;
+    private LocalDate dataRegistro;
 
     @JsonIgnoreProperties({"caixa", "vendedor"})
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
@@ -102,11 +102,11 @@ public class CaixaFluxoSaida implements Serializable {
         this.valorSaida = valorSaida;
     }
 
-    public LocalDateTime getDataRegistro() {
+    public LocalDate getDataRegistro() {
         return dataRegistro;
     }
 
-    public void setDataRegistro(LocalDateTime dataRegistro) {
+    public void setDataRegistro(LocalDate dataRegistro) {
         this.dataRegistro = dataRegistro;
     }
 

@@ -48,12 +48,12 @@ public class Pedido implements Serializable {
     private String descricao;
 
     @NotNull(message = "Data registro é obrigatório")
-    @Column(name = "data_criacao", nullable = false)
+    @Column(name = "data_registro", nullable = false)
     private LocalDate dataRegistro;
 
     @NotNull(message = "Data entrega é obrigatório")
-    @Column(name = "data_hora_entrega", nullable = false)
-    private LocalDate dataHoraEntrega;
+    @Column(name = "data_entrega", nullable = false)
+    private LocalDate dataEntrega;
 
     @NotNull(message = "Valor da entrega é obrigatório")
     @Column(name = "valor_frete", nullable = false, precision = 10, scale = 2)
@@ -71,7 +71,7 @@ public class Pedido implements Serializable {
     @Column(name = "valor_total", nullable = false, precision = 10, scale = 2)
     private BigDecimal valorTotal = BigDecimal.ZERO;
 
-//    @JsonIgnoreProperties({"produto"})
+    @JsonIgnoreProperties({"produto", "pedido"})
     @OneToMany(mappedBy = "pedido", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<PedidoItem> pedidoItems = new ArrayList<>();
 
@@ -89,6 +89,7 @@ public class Pedido implements Serializable {
     @Column(name = "pedido_status", nullable = false)
     private PedidoStatus pedidoStatus = PedidoStatus.CRIADO;
 
+    @JsonIgnoreProperties({"parcelas", "pedido"})
     @OneToMany(mappedBy = "pedido")
     private List<Pagamento> pagamentos;
 
@@ -152,12 +153,12 @@ public class Pedido implements Serializable {
         this.dataRegistro = dataRegistro;
     }
 
-    public LocalDate getDataHoraEntrega() {
-        return dataHoraEntrega;
+    public LocalDate getDataEntrega() {
+        return dataEntrega;
     }
 
-    public void setDataHoraEntrega(LocalDate dataHoraEntrega) {
-        this.dataHoraEntrega = dataHoraEntrega;
+    public void setDataEntrega(LocalDate dataEntrega) {
+        this.dataEntrega = dataEntrega;
     }
 
     public BigDecimal getValorFrete() {

@@ -20,7 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.br.oferta.api.util.event.RecursoCriadoEvent;
 import com.br.oferta.api.service.PedidoService;
+import com.br.oferta.api.util.filter.PedidoFilter;
 import io.swagger.annotations.Api;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -29,7 +32,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping("/pedidos")
-@Api(value="API REST E-COMMERCE")
+@Api(value = "API REST E-COMMERCE")
 @CrossOrigin(origins = "*")
 public class PedidoController {
 
@@ -51,6 +54,20 @@ public class PedidoController {
     public ResponseEntity<Pedido> findById(@PathVariable Long id) {
         Optional<Pedido> pedido = pedidoService.findById(id);
         return pedido.isPresent() ? ResponseEntity.ok(pedido.get()) : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/filter")
+//    @PreAuthorize("hasAuthority('ROLE_PESQUISAR') and #oauth2.hasScope('read')")
+    public List<Pedido> findByFilter(PedidoFilter pedidoFilter) {
+        return pedidoService.filtrar(pedidoFilter);
+    }
+
+    @GetMapping("/valor/registro")
+//    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA') and #oauth2.hasScope('read')")
+    public BigDecimal valorTotalByDataRegistro(LocalDate dataInicio, LocalDate dataFinal) {
+        BigDecimal valorEntrada = pedidoService.valorTotalByDataRegistro(dataInicio, dataFinal);
+        System.out.println("Valor total: " + valorEntrada);
+        return valorEntrada;
     }
 
     @PostMapping("/create")
@@ -76,7 +93,7 @@ public class PedidoController {
             return ResponseEntity.notFound().build();
         }
     }
-    
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity delete(@PathVariable Long id) {
         return pedidoService.delete(id);

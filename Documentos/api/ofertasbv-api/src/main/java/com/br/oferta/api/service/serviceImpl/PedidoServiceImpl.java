@@ -6,6 +6,9 @@
 package com.br.oferta.api.service.serviceImpl;
 
 import com.br.oferta.api.model.Pedido;
+import com.br.oferta.api.util.filter.PedidoFilter;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +22,10 @@ public interface PedidoServiceImpl {
     List<Pedido> findBySort();
 
     Optional<Pedido> findById(Long id);
+
+    List<Pedido> filtrar(PedidoFilter filtro);
+
+    BigDecimal valorTotalByDataRegistro(LocalDate dataInicio, LocalDate dataFinal);
 
     Pedido create(Pedido p);
 

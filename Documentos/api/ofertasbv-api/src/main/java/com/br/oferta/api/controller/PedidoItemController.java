@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping("/pedidositens")
-@Api(value="API REST E-COMMERCE")
+@Api(value = "API REST E-COMMERCE")
 @CrossOrigin(origins = "*")
 public class PedidoItemController {
 
@@ -51,6 +51,13 @@ public class PedidoItemController {
     public ResponseEntity<PedidoItem> findById(@PathVariable Long id) {
         Optional<PedidoItem> pedido = pedidoItemService.findById(id);
         return pedido.isPresent() ? ResponseEntity.ok(pedido.get()) : ResponseEntity.notFound().build();
+    }
+
+    @CrossOrigin(maxAge = 10, allowCredentials = "false") //origins = "http://localhost:8080/categorias")
+    @GetMapping("/produto/{nome}")
+//    @PreAuthorize("hasAuthority('ROLE_PESQUISAR') and #oauth2.hasScope('read')")
+    public List<PedidoItem> findAllByNome(@PathVariable String nome) {
+        return pedidoItemService.findByNome(nome);
     }
 
     @PostMapping("/create")
@@ -76,7 +83,7 @@ public class PedidoItemController {
             return ResponseEntity.notFound().build();
         }
     }
-    
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity delete(@PathVariable Long id) {
         return pedidoItemService.delete(id);

@@ -6,6 +6,7 @@
 package com.br.oferta.api.util.filter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 /**
  *
@@ -23,7 +24,7 @@ public class ProdutoFilter {
     private Long cidade;
     private BigDecimal valorMinimo;
     private BigDecimal valorMaximo;
- 
+    private LocalDate dataRegistro;
 
     public Long getId() {
         return id;
@@ -56,7 +57,6 @@ public class ProdutoFilter {
     public void setMarca(Long marca) {
         this.marca = marca;
     }
-
 
     public Long getOrigem() {
         return origem;
@@ -106,5 +106,12 @@ public class ProdutoFilter {
         this.valorMaximo = valorMaximo;
     }
 
-    
+    public LocalDate getDataRegistro() {
+        return dataRegistro;
+    }
+
+    public void setDataRegistro(LocalDate dataRegistro) {
+        this.dataRegistro = dataRegistro;
+    }
+
 }

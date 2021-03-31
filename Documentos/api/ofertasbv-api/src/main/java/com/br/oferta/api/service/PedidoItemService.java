@@ -7,13 +7,21 @@ package com.br.oferta.api.service;
 
 import com.br.oferta.api.service.serviceImpl.PedidoItemServiceImpl;
 import com.br.oferta.api.model.PedidoItem;
+import com.br.oferta.api.model.Produto;
 import com.br.oferta.api.repository.PedidoItemRepository;
 import com.br.oferta.api.util.error.ServiceNotFoundExeception;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -47,6 +55,27 @@ public class PedidoItemService implements PedidoItemServiceImpl {
     @Override
     public Optional<PedidoItem> findById(Long id) {
         return pedidoItemRepository.findById(id);
+    }
+
+    @Override
+    public List<PedidoItem> findByNome(String nome) {
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<PedidoItem> query = criteriaBuilder.createQuery(PedidoItem.class);
+        Root<PedidoItem> n = query.from(PedidoItem.class);
+
+        Path<String> nomePath = n.join("produto").<String>get("nome");
+        List<Predicate> predicates = new ArrayList<>();
+
+        if (nome != null) {
+            Predicate paramentro = criteriaBuilder.like(criteriaBuilder.lower(nomePath), "%" + nome.toLowerCase() + "%");
+            predicates.add(paramentro);
+        }
+
+        query.where((Predicate[]) predicates.toArray(new Predicate[0]));
+        query.orderBy(criteriaBuilder.desc(n.get("id")));
+        TypedQuery<PedidoItem> typedQuery = em.createQuery(query);
+
+        return typedQuery.getResultList();
     }
 
     @Override
