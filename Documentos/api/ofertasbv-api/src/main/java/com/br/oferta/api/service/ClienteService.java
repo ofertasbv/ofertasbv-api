@@ -1,7 +1,6 @@
 package com.br.oferta.api.service;
 
 import com.br.oferta.api.service.serviceImpl.ClienteServiceImpl;
-import com.br.oferta.api.model.Permissao;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
@@ -10,7 +9,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.br.oferta.api.model.Cliente;
-import com.br.oferta.api.model.Vendedor;
 import com.br.oferta.api.repository.PermissaoRepository;
 import com.br.oferta.api.util.error.ServiceNotFoundExeception;
 import java.util.List;
@@ -101,12 +99,8 @@ public class ClienteService implements ClienteServiceImpl {
 
     @Override
     public Cliente create(Cliente p) {
-        Permissao id = permissaoRepository.getOne(1L);
-        p.getUsuario().getPermissoes().clear();
-        p.getUsuario().getPermissoes().add(0, id);
 //        p.getUsuario().setSenha(MyPasswordEncoder.getPasswordEncoder(p.getUsuario().getSenha()));
 
-        System.out.println("Permissão:" + id);
         System.out.println("Email: " + p.getUsuario().getEmail());
         System.out.println("Senha: " + p.getUsuario().getSenha());
 

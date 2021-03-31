@@ -55,14 +55,8 @@ public class UsuarioController {
 
     @GetMapping("/email/{email}")
 //    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA') and #oauth2.hasScope('read')")
-    public Usuario findByEmail(@PathVariable String email) {
+    public Optional<Usuario> findByEmail(@PathVariable String email) {
         return usuarioService.findByEmail(email);
-    }
-
-    @GetMapping("/login/{email}/{senha}")
-//    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA') and #oauth2.hasScope('read')")
-    public Usuario findByEmail(@PathVariable String email, @PathVariable String senha) {
-        return usuarioService.findByLogin(email, senha);
     }
 
     @PostMapping("/create")

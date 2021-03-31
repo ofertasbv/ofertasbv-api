@@ -20,6 +20,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -49,7 +50,7 @@ public class Produto implements Serializable {
     @Column(name = "foto")
     private String foto;
 
-    @Column(name = "codigo_barra")
+    @Column(name = "codigo_barra", unique = true)
     private String codigoBarra;
 
     @Column(name = "status")

@@ -39,7 +39,6 @@ public class Promocao implements Serializable {
     @Column(name = "descricao", nullable = false)
     private String descricao;
 
-//    @NotNull(message = "A foto de capa é obrigatório")
     @Column(name = "foto", nullable = false)
     private String foto;
 

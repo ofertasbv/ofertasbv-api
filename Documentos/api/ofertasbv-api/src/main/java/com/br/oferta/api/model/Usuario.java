@@ -1,6 +1,5 @@
 package com.br.oferta.api.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -48,14 +47,35 @@ public class Usuario implements Serializable {
     @OneToOne(mappedBy = "usuario", fetch = FetchType.EAGER, optional = false)
     private Pessoa pessoa;
 
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL, CascadeType.PERSIST, CascadeType.REMOVE})
-    @JoinTable(name = "usuario_permissao",
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL, CascadeType.PERSIST, CascadeType.REMOVE})
+    @JoinTable(name = "usuario_grupo",
             joinColumns = @JoinColumn(name = "usuario_id"),
-            inverseJoinColumns = @JoinColumn(name = "permissao_id"),
+            inverseJoinColumns = @JoinColumn(name = "grupo_id"),
             foreignKey = @ForeignKey(name = "fk_usuario_id"),
-            inverseForeignKey = @ForeignKey(name = "fk_permissao_id"))
-    private List<Permissao> permissoes = new ArrayList<>();
+            inverseForeignKey = @ForeignKey(name = "fk_grupo_id"))
+    private List<Grupo> grupos = new ArrayList<>();
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Usuario other = (Usuario) obj;
+        if (getId() == null) {
+            if (other.getId() != null) {
+                return false;
+            }
+        } else if (!id.equals(other.id)) {
+            return false;
+        }
+        return true;
+    }
 
     public Long getId() {
         return id;
@@ -97,42 +117,12 @@ public class Usuario implements Serializable {
         this.pessoa = pessoa;
     }
 
-    public List<Permissao> getPermissoes() {
-        return permissoes;
+    public List<Grupo> getGrupos() {
+        return grupos;
     }
 
-    public void setPermissoes(List<Permissao> permissoes) {
-        this.permissoes = permissoes;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        Usuario other = (Usuario) obj;
-        if (id == null) {
-            if (other.id != null) {
-                return false;
-            }
-        } else if (!id.equals(other.id)) {
-            return false;
-        }
-        return true;
+    public void setGrupos(List<Grupo> grupos) {
+        this.grupos = grupos;
     }
 
 }

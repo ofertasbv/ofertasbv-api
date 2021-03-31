@@ -21,13 +21,12 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "cliente", schema = "oferta")
 @PrimaryKeyJoinColumn(name = "cliente_id", foreignKey = @ForeignKey(name = "fk_cliente"))
-@SuppressWarnings({"IdDefinedInHierarchy", "PersistenceUnitPresent"})
 public class Cliente extends Pessoa implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @NotNull(message = "O cpf é obrigatório")
-    @Column(name = "cpf")
+    @Column(name = "cpf", unique = true)
     private String cpf;
 
     @NotBlank(message = "Sexo é obrigatório")

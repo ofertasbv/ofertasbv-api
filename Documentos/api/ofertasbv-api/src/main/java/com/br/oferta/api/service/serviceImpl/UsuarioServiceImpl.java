@@ -20,11 +20,11 @@ public interface UsuarioServiceImpl {
 
     Optional<Usuario> findById(Long id);
 
-    Usuario findByEmail(String email);
+    Optional<Usuario> findByEmail(String email);
 
     Usuario findByLogin(String email, String senha);
 
-    List<Usuario> findByPermissoesDescricao(String permissaoDescricao);
+    List<String> permissoes(Usuario usuario);
 
     Usuario create(Usuario u);
 

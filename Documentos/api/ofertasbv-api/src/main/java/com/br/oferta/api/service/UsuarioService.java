@@ -50,6 +50,26 @@ public class UsuarioService implements UsuarioServiceImpl {
     }
 
     @Override
+    @SuppressWarnings("JPQLValidation")
+    public Optional<Usuario> findByEmail(String email) {
+        return em.createQuery("from Usuario where lower(email) = lower(:email)", Usuario.class)
+                .setParameter("email", email).getResultList().stream().findFirst();
+    }
+
+    @Override
+    public List<String> permissoes(Usuario usuario) {
+        return em.createQuery("select distinct p.descricao from Usuario u inner join u.grupos g inner join g.permissoes p where u = :usuario", String.class).setParameter("usuario", usuario).getResultList();
+    }
+
+    @Override
+    public Usuario findByLogin(String email, String senha) {
+        Query query = em.createQuery("SELECT p FROM Usuario p WHERE p.email =:email AND p.senha =:senha");
+        query.setParameter("email", email);
+        query.setParameter("senha", senha);
+        return (Usuario) query.getSingleResult();
+    }
+
+    @Override
     public Usuario create(Usuario u) {
         return usuarioRepository.save(u);
     }
@@ -71,29 +91,7 @@ public class UsuarioService implements UsuarioServiceImpl {
         if (exclui == null) {
             throw new EmptyResultDataAccessException(1);
         }
-
         usuarioRepository.deleteById(id);
         return ResponseEntity.ok(exclui);
     }
-
-    @Override
-    public Usuario findByEmail(String email) {
-        Query query = em.createQuery("SELECT p FROM Usuario p WHERE p.email =:email");
-        query.setParameter("email", email);
-        return (Usuario) query.getSingleResult();
-    }
-
-    @Override
-    public List<Usuario> findByPermissoesDescricao(String permissaoDescricao) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Usuario findByLogin(String email, String senha) {
-        Query query = em.createQuery("SELECT p FROM Usuario p WHERE p.email =:email AND p.senha =:senha");
-        query.setParameter("email", email);
-        query.setParameter("senha", senha);
-        return (Usuario) query.getSingleResult();
-    }
-
 }

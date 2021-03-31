@@ -27,14 +27,14 @@ import javax.validation.constraints.NotNull;
 @PrimaryKeyJoinColumn(name = "loja_id", foreignKey = @ForeignKey(name = "fk_loja"))
 public class Loja extends Pessoa implements Serializable {
 
-    private static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     @NotNull(message = "A razão social é obrigatório")
     @Column(name = "razao_social")
     private String razaoSocial;
 
     @NotNull(message = "O cnpj é obrigatório")
-    @Column(name = "cnpj")
+    @Column(name = "cnpj", unique = true)
     private String cnpj;
 
     @JsonIgnore
