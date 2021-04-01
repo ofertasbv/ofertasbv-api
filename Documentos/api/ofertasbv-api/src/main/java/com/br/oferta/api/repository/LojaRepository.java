@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface LojaRepository extends JpaRepository<Loja, Long> {
 
-    public Optional<Loja> findByCNPJIgnoreCase(String cnpj);
+    public Optional<Loja> findByCnpjIgnoreCase(String cnpj);
 }

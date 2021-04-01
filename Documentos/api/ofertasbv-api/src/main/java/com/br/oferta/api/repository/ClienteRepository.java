@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
-     public Optional<Cliente> findByCPFIgnoreCase(String cpf);
+     public Optional<Cliente> findByCpfIgnoreCase(String cpf);
 }
