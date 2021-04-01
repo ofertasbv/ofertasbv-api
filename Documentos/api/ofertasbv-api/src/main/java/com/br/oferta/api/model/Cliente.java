@@ -29,7 +29,6 @@ public class Cliente extends Pessoa implements Serializable {
     @Column(name = "cpf", unique = true)
     private String cpf;
 
-    @NotBlank(message = "Sexo é obrigatório")
     @Column(name = "sexo")
     private String sexo;
 

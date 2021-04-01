@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.br.oferta.api.service.serviceImpl;
+package com.br.oferta.api.service;
 
 import com.br.oferta.api.model.Seguimento;
 import com.br.oferta.api.repository.SeguimentoRepository;
+import com.br.oferta.api.service.serviceImpl.SeguimentoServiceImpl;
 import com.br.oferta.api.util.error.ServiceNotFoundExeception;
 import java.util.ArrayList;
 import java.util.List;

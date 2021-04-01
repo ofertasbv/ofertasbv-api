@@ -1,7 +1,6 @@
-package com.br.oferta.api.config;
-
-//package com.example.algamoney.api.config;
+//package com.br.oferta.api.config;
 //
+//import com.br.oferta.api.util.upload.property.OfertaApiProperty;
 //import java.util.Properties;
 //
 //import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +9,11 @@ package com.br.oferta.api.config;
 //import org.springframework.mail.javamail.JavaMailSender;
 //import org.springframework.mail.javamail.JavaMailSenderImpl;
 //
-//import com.example.algamoney.api.config.property.AlgamoneyApiProperty;
-//
 //@Configuration
 //public class MailConfig {
 //
 //    @Autowired
-//    private AlgamoneyApiProperty property;
+//    private OfertaApiProperty property;
 //
 //    @Bean
 //    public JavaMailSender javaMailSender() {

@@ -9,6 +9,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.br.oferta.api.model.Cliente;
+import com.br.oferta.api.model.Usuario;
 import com.br.oferta.api.repository.PermissaoRepository;
 import com.br.oferta.api.util.error.ServiceNotFoundExeception;
 import java.util.List;
@@ -17,6 +18,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import org.springframework.http.ResponseEntity;
 import com.br.oferta.api.repository.ClienteRepository;
+import com.br.oferta.api.service.exception.NegocioException;
+import com.br.oferta.api.util.geradorsenha.MyPasswordEncoder;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -33,24 +36,19 @@ import org.springframework.beans.factory.annotation.Value;
 @Service
 public class ClienteService implements ClienteServiceImpl {
 
-    private final ClienteRepository clienteRepository;
+    @Autowired
+    private ClienteRepository clienteRepository;
 
-    private final PermissaoRepository permissaoRepository;
+    @Autowired
+    private UsuarioService usuarioService;
 
     @PersistenceContext
-    private final EntityManager em;
+    private EntityManager em;
 
     @Value("${contato.disco.raiz}")
     private Path local;
 
     private static final Logger logger = LoggerFactory.getLogger(ClienteService.class);
-
-    @Autowired
-    public ClienteService(ClienteRepository clienteRepository, PermissaoRepository permissaoRepository, EntityManager em) {
-        this.clienteRepository = clienteRepository;
-        this.permissaoRepository = permissaoRepository;
-        this.em = em;
-    }
 
     @Override
     public List<Cliente> findBySort() {
@@ -99,12 +97,12 @@ public class ClienteService implements ClienteServiceImpl {
 
     @Override
     public Cliente create(Cliente p) {
-//        p.getUsuario().setSenha(MyPasswordEncoder.getPasswordEncoder(p.getUsuario().getSenha()));
+        p.getUsuario().setSenha(MyPasswordEncoder.getPasswordEncoder(p.getUsuario().getSenha()));
 
         System.out.println("Email: " + p.getUsuario().getEmail());
         System.out.println("Senha: " + p.getUsuario().getSenha());
 
-//        Usuario usuarioExistente = usuarioService.findByEmail(p.getUsuario().getEmail());
+//        Optional<Usuario> usuarioExistente = usuarioService.findByEmail(p.getUsuario().getEmail());
 //
 //        if (usuarioExistente != null && !usuarioExistente.equals(p.getUsuario())) {
 //            throw new NegocioException("Já existe um cliente cadastrado com este e-mail.");

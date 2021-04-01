@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.br.oferta.api.util.event.RecursoCriadoEvent;
-import com.br.oferta.api.service.serviceImpl.SeguimentoService;
+import com.br.oferta.api.service.SeguimentoService;
 import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

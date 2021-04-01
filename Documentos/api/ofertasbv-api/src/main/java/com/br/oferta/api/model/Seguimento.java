@@ -29,7 +29,7 @@ public class Seguimento implements Serializable {
     @Column(name = "nome")
     private String nome;
 
-    @JsonIgnoreProperties({"seguimento"})
+    @JsonIgnoreProperties({"seguimento", "subCategorias"})
     @OneToMany(mappedBy = "seguimento", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.ALL})
     private List<Categoria> categorias;
 

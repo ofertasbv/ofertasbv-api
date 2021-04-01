@@ -1,5 +1,6 @@
 package com.br.oferta.api.service;
 
+import com.br.oferta.api.model.Usuario;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
@@ -8,7 +9,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.br.oferta.api.model.Vendedor;
-import com.br.oferta.api.repository.PermissaoRepository;
 import com.br.oferta.api.util.error.ServiceNotFoundExeception;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -16,7 +16,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import org.springframework.http.ResponseEntity;
 import com.br.oferta.api.repository.VendedorRepository;
+import com.br.oferta.api.service.exception.NegocioException;
 import com.br.oferta.api.service.serviceImpl.VendedorServiceImpl;
+import com.br.oferta.api.util.geradorsenha.MyPasswordEncoder;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -33,24 +35,19 @@ import org.springframework.beans.factory.annotation.Value;
 @Service
 public class VendedorService implements VendedorServiceImpl {
 
-    private final VendedorRepository vendedoRepository;
+    @Autowired
+    private VendedorRepository vendedoRepository;
 
-    private final PermissaoRepository permissaoRepository;
+    @Autowired
+    private UsuarioService usuarioService;
 
     @PersistenceContext
-    private final EntityManager em;
+    private EntityManager em;
 
     @Value("${contato.disco.raiz}")
     private Path local;
 
     private static final Logger logger = LoggerFactory.getLogger(VendedorService.class);
-
-    @Autowired
-    public VendedorService(VendedorRepository vendedorRepository, PermissaoRepository permissaoRepository, EntityManager em) {
-        this.vendedoRepository = vendedorRepository;
-        this.permissaoRepository = permissaoRepository;
-        this.em = em;
-    }
 
     @Override
     public List<Vendedor> findBySort() {
@@ -99,16 +96,16 @@ public class VendedorService implements VendedorServiceImpl {
 
     @Override
     public Vendedor create(Vendedor p) {
-//        p.getUsuario().setSenha(MyPasswordEncoder.getPasswordEncoder(p.getUsuario().getSenha()));
+        p.getUsuario().setSenha(MyPasswordEncoder.getPasswordEncoder(p.getUsuario().getSenha()));
 
         System.out.println("Email: " + p.getUsuario().getEmail());
         System.out.println("Senha: " + p.getUsuario().getSenha());
 
-//        Usuario usuarioExistente = usuarioService.findByEmail(p.getUsuario().getEmail());
-//
-//        if (usuarioExistente != null && !usuarioExistente.equals(p.getUsuario())) {
-//            throw new NegocioException("Já existe um cliente cadastrado com este e-mail.");
-//        }
+        Optional<Usuario> usuarioExistente = usuarioService.findByEmail(p.getUsuario().getEmail());
+
+        if (usuarioExistente != null && !usuarioExistente.equals(p.getUsuario())) {
+            throw new NegocioException("Já existe um cliente cadastrado com este e-mail.");
+        }
         return vendedoRepository.saveAndFlush(p);
     }
 
