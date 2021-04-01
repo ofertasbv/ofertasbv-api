@@ -1,25 +1,21 @@
 package com.br.oferta.api.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "categoria", schema = "oferta")
-public class Categoria implements Serializable {
+@Table(name = "Seguimento", schema = "oferta")
+public class Seguimento implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -32,20 +28,9 @@ public class Categoria implements Serializable {
     @Column(name = "nome")
     private String nome;
 
-    @NotNull(message = "A cor é obrigatório")
-    @Column(name = "color")
-    private String color;
-
-    @Column(name = "foto")
-    private String foto;
-
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "seguimento_id", foreignKey = @ForeignKey(name = "fk_categoria_seguimento"))
-    private Seguimento seguimento;
-
-    @JsonIgnoreProperties({"categoria", "produtos"})
-    @OneToMany(mappedBy = "categoria", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.ALL})
-    private List<SubCategoria> subCategorias;
+//    @JsonIgnoreProperties({"categoria", "produtos"})
+    @OneToMany(mappedBy = "seguimento", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.ALL})
+    private List<Categoria> categorias;
 
     @Override
     public int hashCode() {
@@ -66,7 +51,7 @@ public class Categoria implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Categoria other = (Categoria) obj;
+        Seguimento other = (Seguimento) obj;
         if (getId() == null) {
             if (other.getId() != null) {
                 return false;
@@ -89,32 +74,16 @@ public class Categoria implements Serializable {
         return nome;
     }
 
-    public String getColor() {
-        return color;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
-    public String getFoto() {
-        return foto;
+    public List<Categoria> getCategorias() {
+        return categorias;
     }
 
-    public void setFoto(String foto) {
-        this.foto = foto;
-    }
-
-    public List<SubCategoria> getSubCategorias() {
-        return subCategorias;
-    }
-
-    public void setSubCategorias(List<SubCategoria> subCategorias) {
-        this.subCategorias = subCategorias;
-    }
-
-    public Seguimento getSeguimento() {
-        return seguimento;
-    }
-
-    public void setSeguimento(Seguimento seguimento) {
-        this.seguimento = seguimento;
+    public void setCategorias(List<Categoria> categorias) {
+        this.categorias = categorias;
     }
 
 }
