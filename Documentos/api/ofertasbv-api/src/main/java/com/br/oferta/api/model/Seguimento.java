@@ -1,5 +1,6 @@
 package com.br.oferta.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -28,7 +29,7 @@ public class Seguimento implements Serializable {
     @Column(name = "nome")
     private String nome;
 
-//    @JsonIgnoreProperties({"categoria", "produtos"})
+    @JsonIgnoreProperties({"seguimento"})
     @OneToMany(mappedBy = "seguimento", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.ALL})
     private List<Categoria> categorias;
 

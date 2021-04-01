@@ -39,6 +39,7 @@ public class Categoria implements Serializable {
     @Column(name = "foto")
     private String foto;
 
+    @JsonIgnoreProperties({"categorias"})
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "seguimento_id", foreignKey = @ForeignKey(name = "fk_categoria_seguimento"))
     private Seguimento seguimento;
