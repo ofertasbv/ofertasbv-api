@@ -41,7 +41,7 @@ public class SubCategoria implements Serializable {
     @Column(name = "nome", nullable = false)
     private String nome;
 
-    //@JsonIgnore
+    @JsonIgnoreProperties({"subCategorias", "seguimento"})
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "categoria_id", foreignKey = @ForeignKey(name = "fk_subcategoria_categoria"))
     private Categoria categoria;
