@@ -39,7 +39,7 @@ public class Promocao implements Serializable {
     @Column(name = "descricao", nullable = false)
     private String descricao;
 
-    @Column(name = "foto", nullable = false)
+    @Column(name = "foto", nullable = true)
     private String foto;
 
     @NotNull(message = "O desconto é obrigatório")
@@ -66,7 +66,7 @@ public class Promocao implements Serializable {
     @JoinColumn(name = "promocaotipo_id", foreignKey = @ForeignKey(name = "fk_promocao_tipo"))
     private PromocaoTipo promocaoTipo;
 
-    @JsonIgnoreProperties({"promocao", "loja", "estoque", "arquivos", "marca", "cores", "tamanhos", "subCategoria"})
+    @JsonIgnoreProperties({"promocao", "loja", "estoque", "arquivos", "marca", "cores", "tamanhos", "subCategoria", "medida"})
     @OneToMany(mappedBy = "promocao", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Produto> produtos;
 

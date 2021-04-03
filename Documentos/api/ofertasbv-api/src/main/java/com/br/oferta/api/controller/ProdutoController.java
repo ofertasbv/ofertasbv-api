@@ -68,8 +68,8 @@ public class ProdutoController {
     //@CrossOrigin(maxAge = 10, allowCredentials = "false") //origins = "http://localhost:8080/categorias")
     @GetMapping
     //@PreAuthorize("hasAuthority('ROLE_PESQUISAR') and #oauth2.hasScope('read')")
-    public Page<Produto> findAll(ProdutoFilter produtoFilter, Pageable pageable) {
-        return produtoService.filtrar(produtoFilter, pageable);
+    public List<Produto> findAll(ProdutoFilter produtoFilter) {
+        return produtoService.filtrar(produtoFilter);
     }
 
     //@CrossOrigin(maxAge = 10, allowCredentials = "false") //origins = "http://localhost:8080/categorias")
@@ -114,8 +114,8 @@ public class ProdutoController {
 
     @GetMapping("/filter")
 //    @PreAuthorize("hasAuthority('ROLE_PESQUISAR') and #oauth2.hasScope('read')")
-    public Page<Produto> findByFilter(ProdutoFilter produtoFilter, Pageable pageable) {
-        return produtoService.filtrar(produtoFilter, pageable);
+    public List<Produto> findByFilter(ProdutoFilter produtoFilter) {
+        return produtoService.filtrar(produtoFilter);
     }
 
 //    public Page<Produto> pesquisar(ProdutoFilter produtoFilter, Pageable pageable) {

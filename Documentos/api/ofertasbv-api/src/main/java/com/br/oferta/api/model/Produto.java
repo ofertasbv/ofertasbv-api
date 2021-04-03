@@ -20,8 +20,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -35,8 +33,7 @@ public class Produto implements Serializable {
     @Column(name = "id")
     private Long id;
 
-//    @SKU
-    @NotBlank
+    @Column(name = "sku")
     private String sku;
 
     @NotNull(message = "O nome é obrigatório")
@@ -63,7 +60,7 @@ public class Produto implements Serializable {
     private boolean destaque;
 
     @Enumerated(EnumType.STRING)
-    private Origem origem;
+    private Origem origem = Origem.NACIONAL;
 
     @JsonIgnoreProperties({"categoria", "produtos"})
     @ManyToOne(fetch = FetchType.EAGER)

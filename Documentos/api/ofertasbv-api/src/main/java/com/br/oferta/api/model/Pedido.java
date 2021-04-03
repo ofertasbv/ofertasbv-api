@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -72,7 +73,7 @@ public class Pedido implements Serializable {
     private BigDecimal valorTotal = BigDecimal.ZERO;
 
     @JsonIgnoreProperties({"produto", "pedido"})
-    @OneToMany(mappedBy = "pedido", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "pedido", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PedidoItem> pedidoItems = new ArrayList<>();
 
     @JsonIgnoreProperties({"enderecos", "usuario"})

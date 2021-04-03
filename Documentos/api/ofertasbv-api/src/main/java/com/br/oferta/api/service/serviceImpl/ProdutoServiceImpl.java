@@ -32,7 +32,7 @@ public interface ProdutoServiceImpl {
 
     Page<Produto> findAllByPage(Pageable pageable);
 
-    Page<Produto> filtrar(ProdutoFilter filtro, Pageable pageable);
+    List<Produto> filtrar(ProdutoFilter filtro);
 
     List<Produto> findBySubCategoriaById(Long id);
 

@@ -45,6 +45,9 @@ public class Estoque implements Serializable {
     @Column(name = "data_registro", nullable = false)
     private LocalDate dataRegistro;
 
+    @Column(name = "data_fabricacao")
+    private LocalDate dataFabricao;
+
     @Column(name = "data_vencimento")
     private LocalDate dataVencimento;
 
@@ -70,93 +73,23 @@ public class Estoque implements Serializable {
     @Column(name = "valor_venda", nullable = false)
     private BigDecimal valorVenda;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "estoque_status", nullable = false)
+    @Column(name = "estoque_status", nullable = true)
     private EstoqueStatus estoqueStatus = EstoqueStatus.BAIXO;
 
     @JsonIgnore
     @OneToOne(mappedBy = "estoque")
     private Produto produto;
 
-    public BigDecimal calcularValorTotal() {
-        BigDecimal valorTotal = valorUnitario.add(percentual.divide(new BigDecimal(100)).multiply(valorUnitario));
-        return valorTotal;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public LocalDate getDataRegistro() {
-        return dataRegistro;
-    }
-
-    public void setDataRegistro(LocalDate dataRegistro) {
-        this.dataRegistro = dataRegistro;
-    }
-
-    public LocalDate getDataVencimento() {
-        return dataVencimento;
-    }
-
-    public void setDataVencimento(LocalDate dataVencimento) {
-        this.dataVencimento = dataVencimento;
-    }
-
-    public Integer getQuantidade() {
-        return quantidade;
-    }
-
-    public void setQuantidade(Integer quantidade) {
-        this.quantidade = quantidade;
-    }
-
+//    public BigDecimal calcularValorTotal() {
+//        BigDecimal valorTotal = valorUnitario.add(percentual.divide(new BigDecimal(100)).multiply(valorUnitario));
+//        return valorTotal;
+//    }
     public BigDecimal getValorUnitario() {
         Locale locale = new Locale("pt", "Brasil");
         NumberFormat format = NumberFormat.getInstance(locale);
         DecimalFormat resultado = new DecimalFormat();
         return valorUnitario;
-    }
-
-    public void setValorUnitario(BigDecimal valorUnitario) {
-        this.valorUnitario = valorUnitario;
-    }
-
-    public BigDecimal getPercentual() {
-        return percentual;
-    }
-
-    public void setPercentual(BigDecimal percentual) {
-        this.percentual = percentual;
-    }
-
-    public BigDecimal getValorVenda() {
-        return valorVenda = calcularValorTotal();
-    }
-
-    public void setValorVenda(BigDecimal valorVenda) {
-        this.valorVenda = calcularValorTotal();
-    }
-
-    public EstoqueStatus getEstoqueStatus() {
-        return estoqueStatus;
-    }
-
-    public void setEstoqueStatus(EstoqueStatus estoqueStatus) {
-        this.estoqueStatus = estoqueStatus;
-    }
-
-    public Produto getProduto() {
-        return produto;
-    }
-
-    public void setProduto(Produto produto) {
-        this.produto = produto;
     }
 
     @Override
@@ -187,6 +120,82 @@ public class Estoque implements Serializable {
             return false;
         }
         return true;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public LocalDate getDataRegistro() {
+        return dataRegistro;
+    }
+
+    public void setDataRegistro(LocalDate dataRegistro) {
+        this.dataRegistro = dataRegistro;
+    }
+
+    public LocalDate getDataFabricao() {
+        return dataFabricao;
+    }
+
+    public void setDataFabricao(LocalDate dataFabricao) {
+        this.dataFabricao = dataFabricao;
+    }
+
+    public LocalDate getDataVencimento() {
+        return dataVencimento;
+    }
+
+    public void setDataVencimento(LocalDate dataVencimento) {
+        this.dataVencimento = dataVencimento;
+    }
+
+    public Integer getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(Integer quantidade) {
+        this.quantidade = quantidade;
+    }
+
+    public void setValorUnitario(BigDecimal valorUnitario) {
+        this.valorUnitario = valorUnitario;
+    }
+
+    public BigDecimal getPercentual() {
+        return percentual;
+    }
+
+    public void setPercentual(BigDecimal percentual) {
+        this.percentual = percentual;
+    }
+
+    public BigDecimal getValorVenda() {
+        return valorVenda;
+    }
+
+    public void setValorVenda(BigDecimal valorVenda) {
+        this.valorVenda = valorVenda;
+    }
+
+    public EstoqueStatus getEstoqueStatus() {
+        return estoqueStatus;
+    }
+
+    public void setEstoqueStatus(EstoqueStatus estoqueStatus) {
+        this.estoqueStatus = estoqueStatus;
+    }
+
+    public Produto getProduto() {
+        return produto;
+    }
+
+    public void setProduto(Produto produto) {
+        this.produto = produto;
     }
 
 }

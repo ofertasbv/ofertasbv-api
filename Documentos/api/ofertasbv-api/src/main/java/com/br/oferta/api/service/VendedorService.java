@@ -101,11 +101,11 @@ public class VendedorService implements VendedorServiceImpl {
         System.out.println("Email: " + p.getUsuario().getEmail());
         System.out.println("Senha: " + p.getUsuario().getSenha());
 
-        Optional<Usuario> usuarioExistente = usuarioService.findByEmail(p.getUsuario().getEmail());
-
-        if (usuarioExistente != null && !usuarioExistente.equals(p.getUsuario())) {
-            throw new NegocioException("Já existe um cliente cadastrado com este e-mail.");
-        }
+//        Optional<Usuario> usuarioExistente = usuarioService.findByEmail(p.getUsuario().getEmail());
+//
+//        if (usuarioExistente != null && !usuarioExistente.equals(p.getUsuario())) {
+//            throw new NegocioException("Já existe um cliente cadastrado com este e-mail.");
+//        }
         return vendedoRepository.saveAndFlush(p);
     }
 

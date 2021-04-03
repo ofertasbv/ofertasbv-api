@@ -44,28 +44,28 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ProdutoService implements ProdutoServiceImpl {
-    
+
     private final ProdutoRepository produtoRepository;
-    
+
     @PersistenceContext
     private final EntityManager em;
-    
+
     @Value("${contato.disco.raiz}")
     private java.nio.file.Path local;
-    
+
     private static final Logger logger = LoggerFactory.getLogger(ProdutoService.class);
-    
+
     @Autowired
     public ProdutoService(ProdutoRepository produtoRepository, EntityManager em) {
         this.produtoRepository = produtoRepository;
         this.em = em;
     }
-    
+
     @Override
     public Produto create(Produto p) {
         return produtoRepository.save(p);
     }
-    
+
     @Override
     public ResponseEntity update(Long id, Produto p) {
         Produto produtoSalva = produtoRepository.findById(id).get();
@@ -76,18 +76,18 @@ public class ProdutoService implements ProdutoServiceImpl {
         produtoRepository.save(produtoSalva);
         return ResponseEntity.ok(produtoSalva);
     }
-    
+
     @Override
     public ResponseEntity delete(Long id) {
         Produto produtoExclui = produtoRepository.findById(id).get();
         if (produtoExclui == null) {
             throw new EmptyResultDataAccessException(1);
         }
-        
+
         produtoRepository.deleteById(id);
         return ResponseEntity.ok(produtoExclui);
     }
-    
+
     @Override
     public void excluirFoto(String foto) {
         try {
@@ -96,58 +96,58 @@ public class ProdutoService implements ProdutoServiceImpl {
             logger.warn(String.format("Erro apagando foto '%s'. Mensagem: %s", foto, e.getMessage()));
         }
     }
-    
+
     @Override
     public List<Produto> findAll() {
         Query query = em.createQuery("SELECT p FROM Produto p ORDER BY p.destaque ASC");
         return query.getResultList();
     }
-    
+
     @Override
     public Optional<Produto> findById(Long id) {
         return produtoRepository.findById(id);
     }
-    
+
     @Override
     public Page<Produto> findAllByPage(Pageable pageable) {
         return produtoRepository.findAll(pageable);
     }
-    
+
     @Override
     public List<Produto> findByNome(String nome) {
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaQuery<Produto> query = criteriaBuilder.createQuery(Produto.class);
         Root<Produto> n = query.from(Produto.class);
-        
+
         Path<String> nomePath = n.<String>get("nome");
         List<Predicate> predicates = new ArrayList<>();
-        
+
         if (nome != null) {
             Predicate paramentro = criteriaBuilder.like(criteriaBuilder.lower(nomePath), "%" + nome.toLowerCase() + "%");
             predicates.add(paramentro);
         }
-        
+
         query.where((Predicate[]) predicates.toArray(new Predicate[0]));
         query.orderBy(criteriaBuilder.desc(n.get("id")));
         TypedQuery<Produto> typedQuery = em.createQuery(query);
-        
+
         return typedQuery.getResultList();
     }
-    
+
     @Override
     public List<Produto> findBySubCategoriaById(Long id) {
         Query query = em.createQuery("SELECT p FROM Produto p JOIN p.subCategoria c WHERE c.id =:id");
         query.setParameter("id", id);
         return query.getResultList();
     }
-    
+
     @Override
     public List<Produto> findByPromocaoById(Long id) {
         Query query = em.createQuery("SELECT p FROM Produto p JOIN p.promocao o WHERE o.id =:id");
         query.setParameter("id", id);
         return query.getResultList();
     }
-    
+
     @Override
     public List<Produto> findByPessoaById(Long id) {
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
@@ -164,67 +164,47 @@ public class ProdutoService implements ProdutoServiceImpl {
         TypedQuery<Produto> typedQuery = em.createQuery(query);
         return typedQuery.getResultList();
     }
-    
+
     @Override
     public Produto findByCodBarra(String codigoBarra) {
         Query query = em.createQuery("SELECT p FROM Produto p WHERE p.codigoBarra =:codigoBarra");
         query.setParameter("codigoBarra", codigoBarra);
         return (Produto) query.getSingleResult();
     }
-    
+
     @Override
     public List<Produto> findByIsPromocaoBy(Long id) {
         Query query = em.createQuery("SELECT p FROM Produto p, Promocao c WHERE c.id =:id AND c.id NOT MEMBER OF p.promocao");
         query.setParameter("id", id);
         return query.getResultList();
     }
-    
+
     @Override
     public List<Produto> findByDestaque(boolean destaque) {
         Query query = em.createQuery("SELECT p FROM Produto p WHERE p.destaque =:destaque");
         query.setParameter("destaque", destaque);
         return query.getResultList();
     }
-    
+
     @Override
-    public Page<Produto> filtrar(ProdutoFilter filter, Pageable pageable) {
-        
+    public List<Produto> filtrar(ProdutoFilter filter) {
+
         CriteriaBuilder builder = em.getCriteriaBuilder();
         CriteriaQuery<Produto> criteria = builder.createQuery(Produto.class);
         Root<Produto> root = criteria.from(Produto.class);
-        
+
         Predicate[] predicates = criarRestricoes(filter, builder, root);
         criteria.where(predicates);
-        
+
         TypedQuery<Produto> typedQuery = em.createQuery(criteria);
-        adicionarRestricoesDePagina(typedQuery, pageable);
-        
-        return new PageImpl<>(typedQuery.getResultList(), pageable, total(filter));
+//        adicionarRestricoesDePagina(typedQuery, pageable);
+
+//        return new PageImpl<>(typedQuery.getResultList(), pageable, total(filter));
+        return typedQuery.getResultList();
     }
-    
-    private void adicionarRestricoesDePagina(TypedQuery<Produto> query, Pageable pageable) {
-        int paginaAtual = pageable.getPageNumber();
-        int totalRegistroPorPagina = pageable.getPageSize();
-        int primeiroRegistroDaPagina = paginaAtual * totalRegistroPorPagina;
-        
-        query.setFirstResult(primeiroRegistroDaPagina);
-        query.setMaxResults(totalRegistroPorPagina);
-    }
-    
-    private Long total(ProdutoFilter filter) {
-        CriteriaBuilder builder = em.getCriteriaBuilder();
-        CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
-        Root<Produto> root = criteria.from(Produto.class);
-        
-        Predicate[] predicates = criarRestricoes(filter, builder, root);
-        criteria.where(predicates);
-        
-        criteria.select(builder.count(root));
-        return em.createQuery(criteria).getSingleResult();
-    }
-    
+
     private Predicate[] criarRestricoes(ProdutoFilter filter, CriteriaBuilder builder, Root<Produto> root) {
-        
+
         List<Predicate> predicates = new ArrayList<>();
         Path<String> nomeProduto = root.<String>get("nome");
         Path<Long> subCategoriaIdPath = root.join("subCategoria").<Long>get("id");
@@ -233,42 +213,63 @@ public class ProdutoService implements ProdutoServiceImpl {
         Path<Long> promocaoIdPath = root.join("promocao").<Long>get("id");
         Path<BigDecimal> valorProduto = root.join("estoque").<BigDecimal>get("valorVenda");
         Path<LocalDate> dataRegistroPath = root.join("estoque").<LocalDate>get("dataRegistro");
-        
+
         if (filter.getNomeProduto() != null) {
             Predicate paramentro = builder.like(builder.lower(nomeProduto), "%" + filter.getNomeProduto() + "%");
             predicates.add(paramentro);
         }
-        
+
         if (filter.getSubCategoria() != null) {
             Predicate paramentro = builder.equal(subCategoriaIdPath, filter.getSubCategoria());
             predicates.add(paramentro);
         }
-        
+
         if (filter.getMarca() != null) {
             Predicate paramentro = builder.equal(marcaIdPath, filter.getMarca());
             predicates.add(paramentro);
         }
-        
+
         if (filter.getPromocao() != null) {
             Predicate paramentro = builder.equal(promocaoIdPath, filter.getPromocao());
             predicates.add(paramentro);
         }
-        
+
         if (filter.getLoja() != null) {
             Predicate paramentro = builder.equal(lojaIdPath, filter.getLoja());
             predicates.add(paramentro);
         }
-        
+
         if (filter.getValorMinimo() != null & filter.getValorMaximo() != null) {
             Predicate paramentro = builder.between(valorProduto, filter.getValorMinimo(), filter.getValorMaximo());
             predicates.add(paramentro);
         }
-        
+
         if (filter.getDataRegistro() != null) {
             Predicate paramentro = builder.equal(dataRegistroPath, filter.getDataRegistro());
             predicates.add(paramentro);
         }
-        
+
         return predicates.toArray(new Predicate[predicates.size()]);
+    }
+
+    private void adicionarRestricoesDePagina(TypedQuery<Produto> query, Pageable pageable) {
+        int paginaAtual = pageable.getPageNumber();
+        int totalRegistroPorPagina = pageable.getPageSize();
+        int primeiroRegistroDaPagina = paginaAtual * totalRegistroPorPagina;
+
+        query.setFirstResult(primeiroRegistroDaPagina);
+        query.setMaxResults(totalRegistroPorPagina);
+    }
+
+    private Long total(ProdutoFilter filter) {
+        CriteriaBuilder builder = em.getCriteriaBuilder();
+        CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
+        Root<Produto> root = criteria.from(Produto.class);
+
+        Predicate[] predicates = criarRestricoes(filter, builder, root);
+        criteria.where(predicates);
+
+        criteria.select(builder.count(root));
+        return em.createQuery(criteria).getSingleResult();
     }
 }

@@ -125,7 +125,7 @@ public class PedidoItem implements Serializable {
     }
 
     public BigDecimal getValorTotal() {
-        return valorTotal;
+        return valorUnitario.multiply(new BigDecimal(quantidade));
     }
 
     public void setValorTotal(BigDecimal valorTotal) {
