@@ -23,6 +23,9 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Fetch;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -213,6 +216,9 @@ public class ProdutoService implements ProdutoServiceImpl {
         Path<Long> promocaoIdPath = root.join("promocao").<Long>get("id");
         Path<BigDecimal> valorProduto = root.join("estoque").<BigDecimal>get("valorVenda");
         Path<LocalDate> dataRegistroPath = root.join("estoque").<LocalDate>get("dataRegistro");
+
+//        Join<Ereturn, ProductItem> productItemJoin = root.join("productItems", JoinType.LEFT);
+//        Fetch<Ereturn, ProductItem> productItemFetch = root.fetch("productItems", JoinType.LEFT);
 
         if (filter.getNomeProduto() != null) {
             Predicate paramentro = builder.like(builder.lower(nomeProduto), "%" + filter.getNomeProduto() + "%");

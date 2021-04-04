@@ -72,8 +72,7 @@ public class Pedido implements Serializable {
     @Column(name = "valor_total", nullable = false, precision = 10, scale = 2)
     private BigDecimal valorTotal = BigDecimal.ZERO;
 
-    @JsonIgnoreProperties({"produto", "pedido"})
-    @OneToMany(mappedBy = "pedido", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "pedido", fetch = FetchType.LAZY)
     private List<PedidoItem> pedidoItems = new ArrayList<>();
 
     @JsonIgnoreProperties({"enderecos", "usuario"})

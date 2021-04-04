@@ -42,11 +42,11 @@ public class Estoque implements Serializable {
     private Long id;
 
     @NotNull(message = "A data de registro é obrigatório")
-    @Column(name = "data_registro", nullable = false)
+    @Column(name = "data_registro", nullable = true)
     private LocalDate dataRegistro;
 
     @Column(name = "data_fabricacao")
-    private LocalDate dataFabricao;
+    private LocalDate dataFabricacao;
 
     @Column(name = "data_vencimento")
     private LocalDate dataVencimento;
@@ -138,12 +138,12 @@ public class Estoque implements Serializable {
         this.dataRegistro = dataRegistro;
     }
 
-    public LocalDate getDataFabricao() {
-        return dataFabricao;
+    public LocalDate getDataFabricacao() {
+        return dataFabricacao;
     }
 
-    public void setDataFabricao(LocalDate dataFabricao) {
-        this.dataFabricao = dataFabricao;
+    public void setDataFabricacao(LocalDate dataFabricacao) {
+        this.dataFabricacao = dataFabricacao;
     }
 
     public LocalDate getDataVencimento() {

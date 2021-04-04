@@ -26,7 +26,7 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "pedidoitem", schema = "oferta")
-@SuppressWarnings({"IdDefinedInHierarchy", "ConsistentAccessType"})
+@SuppressWarnings({"IdDefinedInHierarchy", "ConsistentAccessType", "PersistenceUnitPresent"})
 public class PedidoItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
