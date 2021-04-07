@@ -98,7 +98,7 @@ public class PedidoService implements PedidoServiceImpl {
         Path<LocalDate> dataEntregaPath = root.<LocalDate>get("dataEntrega");
         
         if (filter.getDescricao() != null) {
-            Predicate paramentro = builder.like(builder.lower(descricaoPath), "%" + filter.getDescricao() + "%");
+            Predicate paramentro = builder.like(builder.lower(descricaoPath), "%" + filter.getDescricao().toLowerCase() + "%");
             predicates.add(paramentro);
         }
         

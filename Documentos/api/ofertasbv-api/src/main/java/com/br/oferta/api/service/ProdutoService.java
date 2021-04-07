@@ -221,7 +221,7 @@ public class ProdutoService implements ProdutoServiceImpl {
 //        Fetch<Ereturn, ProductItem> productItemFetch = root.fetch("productItems", JoinType.LEFT);
 
         if (filter.getNomeProduto() != null) {
-            Predicate paramentro = builder.like(builder.lower(nomeProduto), "%" + filter.getNomeProduto() + "%");
+            Predicate paramentro = builder.like(builder.lower(nomeProduto), "%" + filter.getNomeProduto().toLowerCase() + "%");
             predicates.add(paramentro);
         }
 
