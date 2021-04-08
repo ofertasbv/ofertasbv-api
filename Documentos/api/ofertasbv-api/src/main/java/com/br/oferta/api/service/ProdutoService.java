@@ -197,6 +197,7 @@ public class ProdutoService implements ProdutoServiceImpl {
         Root<Produto> root = criteria.from(Produto.class);
 
         Predicate[] predicates = criarRestricoes(filter, builder, root);
+        criteria.orderBy(builder.asc(root.get("id")));
         criteria.where(predicates);
 
         TypedQuery<Produto> typedQuery = em.createQuery(criteria);
@@ -219,7 +220,6 @@ public class ProdutoService implements ProdutoServiceImpl {
 
 //        Join<Ereturn, ProductItem> productItemJoin = root.join("productItems", JoinType.LEFT);
 //        Fetch<Ereturn, ProductItem> productItemFetch = root.fetch("productItems", JoinType.LEFT);
-
         if (filter.getNomeProduto() != null) {
             Predicate paramentro = builder.like(builder.lower(nomeProduto), "%" + filter.getNomeProduto().toLowerCase() + "%");
             predicates.add(paramentro);

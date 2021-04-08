@@ -67,7 +67,7 @@ public class Promocao implements Serializable {
     private PromocaoTipo promocaoTipo;
 
     @JsonIgnoreProperties({"promocao", "loja", "estoque", "arquivos", "marca", "cores", "tamanhos", "subCategoria", "medida"})
-    @OneToMany(mappedBy = "promocao", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "promocao", fetch = FetchType.LAZY)
     private List<Produto> produtos;
 
     @JsonIgnoreProperties({"usuario", "produtos", "enderecos"})
