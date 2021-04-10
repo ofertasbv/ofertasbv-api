@@ -5,11 +5,16 @@
  */
 package com.br.oferta.api.service;
 
+import com.br.oferta.api.model.Pedido;
 import com.br.oferta.api.service.serviceImpl.PedidoItemServiceImpl;
 import com.br.oferta.api.model.PedidoItem;
 import com.br.oferta.api.model.Produto;
+import com.br.oferta.api.model.Promocao;
 import com.br.oferta.api.repository.PedidoItemRepository;
 import com.br.oferta.api.util.error.ServiceNotFoundExeception;
+import com.br.oferta.api.util.filter.PedidoFilter;
+import com.br.oferta.api.util.filter.PedidoItemFilter;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -76,6 +81,41 @@ public class PedidoItemService implements PedidoItemServiceImpl {
         TypedQuery<PedidoItem> typedQuery = em.createQuery(query);
 
         return typedQuery.getResultList();
+    }
+
+    @Override
+    public List<PedidoItem> filtrar(PedidoItemFilter filter) {
+
+        CriteriaBuilder builder = em.getCriteriaBuilder();
+        CriteriaQuery<PedidoItem> criteria = builder.createQuery(PedidoItem.class);
+        Root<PedidoItem> root = criteria.from(PedidoItem.class);
+
+        Predicate[] predicates = criarRestricoes(filter, builder, root);
+        criteria.orderBy(builder.asc(root.get("id")));
+        criteria.where(predicates);
+
+        TypedQuery<PedidoItem> typedQuery = em.createQuery(criteria);
+
+        return typedQuery.getResultList();
+    }
+
+    private Predicate[] criarRestricoes(PedidoItemFilter filter, CriteriaBuilder builder, Root<PedidoItem> root) {
+
+        List<Predicate> predicates = new ArrayList<>();
+        Path<String> nomePath = root.join("produto").<String>get("nome");
+        Path<Long> pedidoPath = root.join("pedido").<Long>get("id");
+
+        if (filter.getNome() != null) {
+            Predicate paramentro = builder.like(builder.lower(nomePath), "%" + filter.getNome().toLowerCase() + "%");
+            predicates.add(paramentro);
+        }
+
+        if (filter.getPedido() != null) {
+            Predicate paramentro = builder.equal(pedidoPath, filter.getPedido());
+            predicates.add(paramentro);
+        }
+
+        return predicates.toArray(new Predicate[predicates.size()]);
     }
 
     @Override

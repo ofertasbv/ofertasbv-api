@@ -6,6 +6,7 @@
 package com.br.oferta.api.service.serviceImpl;
 
 import com.br.oferta.api.model.PedidoItem;
+import com.br.oferta.api.util.filter.PedidoItemFilter;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,8 @@ public interface PedidoItemServiceImpl {
     Optional<PedidoItem> findById(Long id);
 
     List<PedidoItem> findByNome(String nome);
+
+    List<PedidoItem> filtrar(PedidoItemFilter filtro);
 
     PedidoItem create(PedidoItem p);
 

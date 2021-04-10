@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.br.oferta.api.util.event.RecursoCriadoEvent;
+import com.br.oferta.api.util.filter.PedidoItemFilter;
 import io.swagger.annotations.Api;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -51,6 +52,12 @@ public class PedidoItemController {
     public ResponseEntity<PedidoItem> findById(@PathVariable Long id) {
         Optional<PedidoItem> pedido = pedidoItemService.findById(id);
         return pedido.isPresent() ? ResponseEntity.ok(pedido.get()) : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/filter")
+//    @PreAuthorize("hasAuthority('ROLE_PESQUISAR') and #oauth2.hasScope('read')")
+    public List<PedidoItem> findByFilter(PedidoItemFilter filter) {
+        return pedidoItemService.filtrar(filter);
     }
 
     @CrossOrigin(maxAge = 10, allowCredentials = "false") //origins = "http://localhost:8080/categorias")

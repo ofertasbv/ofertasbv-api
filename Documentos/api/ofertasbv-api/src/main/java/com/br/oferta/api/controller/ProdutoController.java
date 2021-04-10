@@ -179,8 +179,7 @@ public class ProdutoController {
     @GetMapping("/codigobarra/{codigobarra}")
 //    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA') and #oauth2.hasScope('read')")
     public Produto findPessoaByCodBar(@PathVariable String codigobarra) {
-        Produto produto = produtoService.findByCodBarra(codigobarra);
-        return produto;
+        return produtoService.findByCodBarra(codigobarra);
     }
 
     @PostMapping("/upload")
