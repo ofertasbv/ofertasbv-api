@@ -23,9 +23,6 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Fetch;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -197,14 +194,14 @@ public class ProdutoService implements ProdutoServiceImpl {
         Root<Produto> root = criteria.from(Produto.class);
 
         Predicate[] predicates = criarRestricoes(filter, builder, root);
-        criteria.orderBy(builder.asc(root.get("id")));
+        criteria.orderBy(builder.asc(root.get("nome")));
         criteria.where(predicates);
 
         TypedQuery<Produto> typedQuery = em.createQuery(criteria);
-//        adicionarRestricoesDePagina(typedQuery, pageable);
+//        adicionarRestricoesDePagina(typedQuery);
 
-//        return new PageImpl<>(typedQuery.getResultList(), pageable, total(filter));
         return typedQuery.getResultList();
+//        return new PageImpl<>(typedQuery.getResultList(), pageable, total(filter));
     }
 
     private Predicate[] criarRestricoes(ProdutoFilter filter, CriteriaBuilder builder, Root<Produto> root) {

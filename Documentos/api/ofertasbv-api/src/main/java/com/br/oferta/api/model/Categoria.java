@@ -45,7 +45,7 @@ public class Categoria implements Serializable {
     private Seguimento seguimento;
 
     @JsonIgnoreProperties({"categoria", "produtos"})
-    @OneToMany(mappedBy = "categoria", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.ALL})
+    @OneToMany(mappedBy = "categoria", fetch = FetchType.LAZY)
     private List<SubCategoria> subCategorias;
 
     @Override

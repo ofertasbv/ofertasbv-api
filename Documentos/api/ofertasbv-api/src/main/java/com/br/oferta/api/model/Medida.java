@@ -39,7 +39,7 @@ public class Medida implements Serializable {
     private String descricao;
 
     @JsonIgnoreProperties({"promocao", "loja", "estoque", "arquivos", "marca", "cores", "tamanhos", "subCategoria", "medida"})
-    @OneToMany(mappedBy = "medida", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "medida", fetch = FetchType.LAZY)
     private List<Produto> produtos;
 
     @Override

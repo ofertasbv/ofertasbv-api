@@ -5,6 +5,7 @@
  */
 package com.br.oferta.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.List;
@@ -47,7 +48,7 @@ public class SubCategoria implements Serializable {
     private Categoria categoria;
 
     @JsonIgnoreProperties({"promocao", "loja", "estoque", "arquivos", "marca", "cores", "tamanhos", "subCategoria"})
-    @OneToMany(mappedBy = "subCategoria", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "subCategoria", fetch = FetchType.EAGER)
     private List<Produto> produtos;
 
     public Long getId() {

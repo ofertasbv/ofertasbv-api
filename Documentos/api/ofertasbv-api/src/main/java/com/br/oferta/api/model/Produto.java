@@ -2,6 +2,7 @@ package com.br.oferta.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -20,6 +21,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -114,11 +116,9 @@ public class Produto implements Serializable {
             inverseForeignKey = @ForeignKey(name = "fk_cor_id"))
     private List<Cor> cores = new ArrayList<>();
 
-//    
-//     public void adicionarCores(List<Cor> cores) {
-//        this.setCores(cores);
-//        this.getCores().forEach(i -> i.(this));
-//    }
+    @Transient
+    private BigDecimal valorComDesconto;
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -299,6 +299,15 @@ public class Produto implements Serializable {
 
     public void setCores(List<Cor> cores) {
         this.cores = cores;
+    }
+
+    public BigDecimal getValorComDesconto() {
+        valorComDesconto = estoque.calcularValorTotalPromocao();
+        return valorComDesconto;
+    }
+
+    public void setValorComDesconto(BigDecimal valorComDesconto) {
+        this.valorComDesconto = valorComDesconto;
     }
 
 }

@@ -68,8 +68,8 @@ public class ProdutoController {
     //@CrossOrigin(maxAge = 10, allowCredentials = "false") //origins = "http://localhost:8080/categorias")
     @GetMapping
     //@PreAuthorize("hasAuthority('ROLE_PESQUISAR') and #oauth2.hasScope('read')")
-    public List<Produto> findAll(ProdutoFilter produtoFilter) {
-        return produtoService.filtrar(produtoFilter);
+    public List<Produto> findAll() {
+        return produtoService.findAll();
     }
 
     //@CrossOrigin(maxAge = 10, allowCredentials = "false") //origins = "http://localhost:8080/categorias")

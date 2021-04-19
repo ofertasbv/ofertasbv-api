@@ -81,10 +81,16 @@ public class Estoque implements Serializable {
     @OneToOne(mappedBy = "estoque")
     private Produto produto;
 
-//    public BigDecimal calcularValorTotal() {
-//        BigDecimal valorTotal = valorUnitario.add(percentual.divide(new BigDecimal(100)).multiply(valorUnitario));
-//        return valorTotal;
-//    }
+    public BigDecimal calcularValorTotal() {
+        BigDecimal valorTotal = valorUnitario.add(percentual.divide(new BigDecimal(100)).multiply(valorUnitario));
+        return valorTotal;
+    }
+
+    public BigDecimal calcularValorTotalPromocao() {
+        BigDecimal valorTotal = valorVenda.subtract(produto.getPromocao().getDesconto().divide(new BigDecimal(100)).multiply(valorVenda));
+        return valorTotal;
+    }
+
     public BigDecimal getValorUnitario() {
         Locale locale = new Locale("pt", "Brasil");
         NumberFormat format = NumberFormat.getInstance(locale);
