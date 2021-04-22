@@ -1,6 +1,5 @@
 package com.br.oferta.api.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -24,7 +23,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "pessoa", schema = "oferta")
@@ -50,7 +48,6 @@ public class Pessoa implements Serializable {
     @Column(name = "ativo")
     private boolean ativo = Boolean.TRUE;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_pessoa")
     private TipoPessoa tipoPessoa = TipoPessoa.FISICA;
@@ -63,8 +60,8 @@ public class Pessoa implements Serializable {
     @JoinColumn(name = "usuario_id", foreignKey = @ForeignKey(name = "fk_pessoa_usuario"), nullable = false)
     private Usuario usuario = new Usuario();
 
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"pessoas"})
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "endereco_pessoa",
             joinColumns = @JoinColumn(name = "pessoa_id"),
             inverseJoinColumns = @JoinColumn(name = "endereco_id"),

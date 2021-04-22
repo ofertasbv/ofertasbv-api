@@ -16,8 +16,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import java.util.List;
-import javax.persistence.ManyToMany;
 
 @Entity
 @Table(name = "endereco", schema = "oferta")
@@ -58,13 +56,9 @@ public class Endereco implements Serializable {
     @Column(name = "tipo_endereco")
     private TipoEndereco tipoEndereco;
 
-    @JsonIgnore
-    @Column(name = "local", columnDefinition = "GEOMETRY(Point,4326)")
-    private Point local;
-
-    @JsonIgnore
-    @ManyToMany(mappedBy = "enderecos")
-    private List<Pessoa> pessoas;
+//    @JsonIgnore
+//    @Column(name = "local", columnDefinition = "GEOMETRY(Point,4326)")
+//    private Point local;
 
     @JsonIgnoreProperties({"estado"})
     @ManyToOne(fetch = FetchType.EAGER)
@@ -151,21 +145,13 @@ public class Endereco implements Serializable {
         this.tipoEndereco = tipoEndereco;
     }
 
-    public Point getLocal() {
-        return local;
-    }
-
-    public void setLocal(Point local) {
-        this.local = local;
-    }
-
-    public List<Pessoa> getPessoas() {
-        return pessoas;
-    }
-
-    public void setPessoas(List<Pessoa> pessoas) {
-        this.pessoas = pessoas;
-    }
+//    public Point getLocal() {
+//        return local;
+//    }
+//
+//    public void setLocal(Point local) {
+//        this.local = local;
+//    }
 
     @Override
     public int hashCode() {
