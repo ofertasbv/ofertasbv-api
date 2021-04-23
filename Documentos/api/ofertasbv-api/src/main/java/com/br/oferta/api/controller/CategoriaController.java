@@ -72,6 +72,13 @@ public class CategoriaController {
         return categoria.isPresent() ? ResponseEntity.ok(categoria.get()) : ResponseEntity.notFound().build();
     }
 
+//    @CrossOrigin(maxAge = 10, allowCredentials = "false") //origins = "http://localhost:8080/categorias")
+    @GetMapping("/seguimento/{id}")
+//    @PreAuthorize("hasAuthority('ROLE_PESQUISAR') and #oauth2.hasScope('read')")
+    public List<Categoria> findAllBySeguimento(@PathVariable Long id) {
+        return categoriaService.findBySeguimento(id);
+    }
+
     @GetMapping("/subcategoria/{id}")
 //    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA') and #oauth2.hasScope('read')")
     public Categoria findSubCategoriaById(@PathVariable Long id) {
