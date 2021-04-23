@@ -19,7 +19,9 @@ public interface CategoriaServiceImpl {
     List<Categoria> findBySort();
 
     Optional<Categoria> findById(Long id);
-    
+
+    List<Categoria> findBySeguimento(Long id);
+
     List<Categoria> findByNome(String nome);
 
     Categoria findBySubCategoriaId(Long id);

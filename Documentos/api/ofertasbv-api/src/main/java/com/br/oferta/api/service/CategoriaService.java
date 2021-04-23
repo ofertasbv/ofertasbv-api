@@ -74,6 +74,13 @@ public class CategoriaService implements CategoriaServiceImpl {
     }
 
     @Override
+    public List<Categoria> findBySeguimento(Long id) {
+        Query query = em.createQuery("SELECT p FROM Categoria p JOIN p.seguimento o WHERE o.id =:id");
+        query.setParameter("id", id);
+        return query.getResultList();
+    }
+
+    @Override
     public List<Categoria> findByNome(String nome) {
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaQuery<Categoria> query = criteriaBuilder.createQuery(Categoria.class);

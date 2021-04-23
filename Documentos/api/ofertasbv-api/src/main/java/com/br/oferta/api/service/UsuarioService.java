@@ -9,6 +9,7 @@ import com.br.oferta.api.service.serviceImpl.UsuarioServiceImpl;
 import com.br.oferta.api.model.Usuario;
 import com.br.oferta.api.repository.UsuarioRepository;
 import com.br.oferta.api.util.error.ServiceNotFoundExeception;
+import com.br.oferta.api.util.geradorsenha.MyPasswordEncoder;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
@@ -71,12 +72,23 @@ public class UsuarioService implements UsuarioServiceImpl {
 
     @Override
     public Usuario create(Usuario u) {
+        u.setSenha(MyPasswordEncoder.getPasswordEncoder(u.getSenha()));
+
+        System.out.println("Email: " + u.getEmail());
+        System.out.println("Senha: " + u.getSenha());
+
         return usuarioRepository.save(u);
     }
 
     @Override
     public ResponseEntity update(Long id, Usuario u) {
         Usuario salva = usuarioRepository.findById(id).get();
+
+        u.setSenha(MyPasswordEncoder.getPasswordEncoder(u.getSenha()));
+
+        System.out.println("Email: " + u.getEmail());
+        System.out.println("Senha: " + u.getSenha());
+
         if (salva == null) {
             throw new ServiceNotFoundExeception("Arquivo não encotrado com ID: " + id);
         }
