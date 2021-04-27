@@ -43,7 +43,7 @@ public class CaixaFluxoSaida implements Serializable {
     @Column(name = "data_registro")
     private LocalDate dataRegistro;
 
-    @JsonIgnoreProperties({"caixa", "vendedor"})
+    @JsonIgnoreProperties({"caixa", "vendedor", "caixaFluxoSaidas"})
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "caixafluxo_id", foreignKey = @ForeignKey(name = "fk_caixa_fluxo_saida_caixa_fluxo"))
     private CaixaFluxo caixaFluxo;

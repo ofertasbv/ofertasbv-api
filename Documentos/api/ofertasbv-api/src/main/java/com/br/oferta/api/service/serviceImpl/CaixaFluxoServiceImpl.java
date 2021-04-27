@@ -6,6 +6,7 @@
 package com.br.oferta.api.service.serviceImpl;
 
 import com.br.oferta.api.model.CaixaFluxo;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,10 @@ public interface CaixaFluxoServiceImpl {
     List<CaixaFluxo> findBySort();
 
     Optional<CaixaFluxo> findById(Long id);
+
+    BigDecimal totalEntradaById(Long id);
+
+    BigDecimal totalSaidaById(Long id);
 
     CaixaFluxo create(CaixaFluxo a);
 

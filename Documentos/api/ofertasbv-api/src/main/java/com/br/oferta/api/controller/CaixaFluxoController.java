@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.br.oferta.api.util.event.RecursoCriadoEvent;
 import io.swagger.annotations.Api;
+import java.math.BigDecimal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -57,6 +58,18 @@ public class CaixaFluxoController {
     public ResponseEntity<CaixaFluxo> findById(@PathVariable Long id) {
         Optional<CaixaFluxo> caixa = caixaFluxoService.findById(id);
         return caixa.isPresent() ? ResponseEntity.ok(caixa.get()) : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/totalEntrada/{id}")
+//    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA') and #oauth2.hasScope('read')")
+    public BigDecimal somaTotalEntrada(@PathVariable Long id) {
+        return caixaFluxoService.totalEntradaById(id);
+    }
+
+    @GetMapping("/totalSaida/{id}")
+//    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA') and #oauth2.hasScope('read')")
+    public BigDecimal somaTotalSaida(@PathVariable Long id) {
+        return caixaFluxoService.totalSaidaById(id);
     }
 
     @PostMapping("/create")

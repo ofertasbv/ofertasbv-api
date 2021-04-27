@@ -6,14 +6,20 @@
 package com.br.oferta.api.service;
 
 import com.br.oferta.api.model.CaixaFluxo;
+import com.br.oferta.api.model.CaixaFluxoEntrada;
 import com.br.oferta.api.repository.CaixaFluxoRepository;
 import com.br.oferta.api.service.serviceImpl.CaixaFluxoServiceImpl;
 import com.br.oferta.api.util.error.ServiceNotFoundExeception;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Root;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -47,6 +53,34 @@ public class CaixaFluxoService implements CaixaFluxoServiceImpl {
     @Override
     public Optional<CaixaFluxo> findById(Long id) {
         return caixaFluxoRepository.findById(id);
+    }
+
+    @Override
+    public BigDecimal totalEntradaById(Long id) {
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<BigDecimal> criteriaQuery = criteriaBuilder.createQuery(BigDecimal.class);
+        Root<CaixaFluxo> root = criteriaQuery.from(CaixaFluxo.class);
+        Join<CaixaFluxo, CaixaFluxoEntrada> typeJoin = root.join("caixaFluxoEntradas");
+
+        criteriaQuery.select(criteriaBuilder.sum(typeJoin.get("valorEntrada")));
+        criteriaQuery.where(criteriaBuilder.equal(root.get("id"), id));
+
+        BigDecimal total = em.createQuery(criteriaQuery).getSingleResult();
+        return total;
+    }
+
+    @Override
+    public BigDecimal totalSaidaById(Long id) {
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<BigDecimal> criteriaQuery = criteriaBuilder.createQuery(BigDecimal.class);
+        Root<CaixaFluxo> root = criteriaQuery.from(CaixaFluxo.class);
+        Join<CaixaFluxo, CaixaFluxoEntrada> typeJoin = root.join("caixaFluxoSaidas");
+
+        criteriaQuery.select(criteriaBuilder.sum(typeJoin.get("valorSaida")));
+        criteriaQuery.where(criteriaBuilder.equal(root.get("id"), id));
+
+        BigDecimal total = em.createQuery(criteriaQuery).getSingleResult();
+        return total;
     }
 
     @Override

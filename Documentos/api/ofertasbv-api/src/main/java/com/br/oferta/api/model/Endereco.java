@@ -43,11 +43,9 @@ public class Endereco implements Serializable {
     @Column(name = "cep")
     private String cep;
 
-//    @JsonIgnore
     @Column(name = "latitude")
     private double latitude;
 
-//    @JsonIgnore
     @Column(name = "longitude")
     private double longitude;
 
@@ -60,7 +58,6 @@ public class Endereco implements Serializable {
 //    @Column(name = "local", columnDefinition = "GEOMETRY(Point,4326)")
 //    private Point local;
 
-    @JsonIgnoreProperties({"estado"})
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cidade_id")
     private Cidade cidade;
