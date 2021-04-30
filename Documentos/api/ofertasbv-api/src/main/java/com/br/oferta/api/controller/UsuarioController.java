@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -23,6 +22,7 @@ import com.br.oferta.api.service.UsuarioService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -61,7 +61,7 @@ public class UsuarioController {
 
     @PostMapping("/create")
 //    @PreAuthorize("hasAuthority('ROLE_CADASTRAR_CATEGORIA') and #oauth2.hasScope('write')")
-    public ResponseEntity<Usuario> criar(@Valid @RequestBody Usuario usuario, HttpServletResponse response) {
+    public ResponseEntity<Usuario> criar(@Validated @RequestBody Usuario usuario, HttpServletResponse response) {
         Usuario usuarioSalva = usuarioService.create(usuario);
         publisher.publishEvent(new RecursoCriadoEvent(this, response, usuarioSalva.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioSalva);
@@ -69,7 +69,7 @@ public class UsuarioController {
 
     @PutMapping("/update/{id}")
 //    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA')")
-    public ResponseEntity<Usuario> atualizar(@PathVariable Long id, @Valid @RequestBody Usuario usuario) {
+    public ResponseEntity<Usuario> atualizar(@PathVariable Long id, @Validated @RequestBody Usuario usuario) {
         try {
             Usuario salva = usuarioService.findById(id).get();
             if (salva == null) {

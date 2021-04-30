@@ -17,11 +17,17 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  *
  * @author fabio
  */
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "loja", schema = "oferta")
 @PrimaryKeyJoinColumn(name = "loja_id", foreignKey = @ForeignKey(name = "fk_loja"))
@@ -44,37 +50,5 @@ public class Loja extends Pessoa implements Serializable {
     @JsonIgnoreProperties({"loja", "subCategoria", "promocao", "marca", "estoque", "arquivos", "cores", "tamanhos"})
     @OneToMany(mappedBy = "loja", fetch = FetchType.LAZY)
     private List<Produto> produtos;
-
-    public String getRazaoSocial() {
-        return razaoSocial;
-    }
-
-    public void setRazaoSocial(String razaoSocial) {
-        this.razaoSocial = razaoSocial;
-    }
-
-    public String getCnpj() {
-        return cnpj;
-    }
-
-    public void setCnpj(String cnpj) {
-        this.cnpj = cnpj;
-    }
-
-    public List<Promocao> getPromocaos() {
-        return promocaos;
-    }
-
-    public void setPromocaos(List<Promocao> promocaos) {
-        this.promocaos = promocaos;
-    }
-
-    public List<Produto> getProdutos() {
-        return produtos;
-    }
-
-    public void setProdutos(List<Produto> produtos) {
-        this.produtos = produtos;
-    }
 
 }

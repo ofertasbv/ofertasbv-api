@@ -3,7 +3,6 @@ package com.br.oferta.api.controller;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -38,6 +37,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -74,13 +74,13 @@ public class ClienteController {
     }
 
     @CrossOrigin(maxAge = 10, allowCredentials = "false") //origins = "http://localhost:8080/categorias")
-    @GetMapping("/nome/{nome}")
+    @GetMapping("/{nome}")
 //    @PreAuthorize("hasAuthority('ROLE_PESQUISAR') and #oauth2.hasScope('read')")
     public List<Cliente> findAllByNome(@PathVariable String nome) {
         return clienteService.findByNome(nome);
     }
 
-    @GetMapping("/telefone/{telefone}")
+    @GetMapping("/{telefone}")
 //    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA') and #oauth2.hasScope('read')")
     public Cliente findByTelefone(@PathVariable String telefone) {
         Cliente cliente = clienteService.findByTelefone(telefone);
@@ -89,7 +89,7 @@ public class ClienteController {
 
     @PostMapping("/create")
     //@PreAuthorize("hasAuthority('ROLE_CADASTRAR_PESSOA') and #oauth2.hasScope('write')")
-    public ResponseEntity<Cliente> create(@Valid @RequestBody Cliente pessoa, HttpServletResponse response) {
+    public ResponseEntity<Cliente> create(@Validated @RequestBody Cliente pessoa, HttpServletResponse response) {
         Cliente pessoaSalva = clienteService.create(pessoa);
         publisher.publishEvent(new RecursoCriadoEvent(this, response, pessoaSalva.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(pessoaSalva);
@@ -97,7 +97,7 @@ public class ClienteController {
 
     @PutMapping("/update/{id}")
 //    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA')")
-    public ResponseEntity<Cliente> update(@PathVariable Long id, @Valid @RequestBody Cliente cliente) {
+    public ResponseEntity<Cliente> update(@PathVariable Long id, @Validated @RequestBody Cliente cliente) {
         try {
             Cliente salvar = clienteService.findById(id).get();
             if (salvar == null) {

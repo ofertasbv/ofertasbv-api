@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -34,6 +33,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -95,7 +95,7 @@ public class CategoriaController {
 
     @PostMapping("/create")
 //    @PreAuthorize("hasAuthority('ROLE_CADASTRAR_CATEGORIA') and #oauth2.hasScope('write')")
-    public ResponseEntity<Categoria> create(@Valid @RequestBody Categoria categoria, HttpServletResponse response) {
+    public ResponseEntity<Categoria> create(@Validated @RequestBody Categoria categoria, HttpServletResponse response) {
         Categoria categoriaSalva = categoriaService.create(categoria);
         publisher.publishEvent(new RecursoCriadoEvent(this, response, categoriaSalva.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(categoriaSalva);
@@ -103,7 +103,7 @@ public class CategoriaController {
 
     @PutMapping("/update/{id}")
 //    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA')")
-    public ResponseEntity<Categoria> update(@PathVariable Long id, @Valid @RequestBody Categoria categoria) {
+    public ResponseEntity<Categoria> update(@PathVariable Long id, @Validated @RequestBody Categoria categoria) {
         try {
             Categoria categoriaSalva = categoriaService.findById(id).get();
             if (categoriaSalva == null) {

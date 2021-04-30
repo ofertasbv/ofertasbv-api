@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -25,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -66,7 +66,7 @@ public class MarcaController {
 
     @PostMapping("/create")
 //    @PreAuthorize("hasAuthority('ROLE_CADASTRAR_CATEGORIA') and #oauth2.hasScope('write')")
-    public ResponseEntity<Marca> create(@Valid @RequestBody Marca marca, HttpServletResponse response) {
+    public ResponseEntity<Marca> create(@Validated @RequestBody Marca marca, HttpServletResponse response) {
         Marca marcaSalva = marcaService.create(marca);
         publisher.publishEvent(new RecursoCriadoEvent(this, response, marcaSalva.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(marcaSalva);
@@ -74,7 +74,7 @@ public class MarcaController {
 
     @PutMapping("/update/{id}")
 //    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA')")
-    public ResponseEntity<Marca> update(@PathVariable Long id, @Valid @RequestBody Marca marca) {
+    public ResponseEntity<Marca> update(@PathVariable Long id, @Validated @RequestBody Marca marca) {
         try {
             Marca marcaSalva = marcaService.findById(id).get();
             if (marcaSalva == null) {

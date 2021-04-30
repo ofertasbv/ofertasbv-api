@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -25,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -59,7 +59,7 @@ public class EstoqueController {
 
     @PostMapping("/create")
 //    @PreAuthorize("hasAuthority('ROLE_CADASTRAR_CATEGORIA') and #oauth2.hasScope('write')")
-    public ResponseEntity<Estoque> create(@Valid @RequestBody Estoque estoque, HttpServletResponse response) {
+    public ResponseEntity<Estoque> create(@Validated @RequestBody Estoque estoque, HttpServletResponse response) {
         Estoque estoqueSalva = estoqueService.create(estoque);
         publisher.publishEvent(new RecursoCriadoEvent(this, response, estoqueSalva.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(estoqueSalva);
@@ -67,7 +67,7 @@ public class EstoqueController {
 
     @PutMapping("/update/{id}")
 //    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA')")
-    public ResponseEntity<Estoque> update(@PathVariable Long id, @Valid @RequestBody Estoque estoque) {
+    public ResponseEntity<Estoque> update(@PathVariable Long id, @Validated @RequestBody Estoque estoque) {
         try {
             Estoque estoqueSalva = estoqueService.findById(id).get();
             if (estoqueSalva == null) {

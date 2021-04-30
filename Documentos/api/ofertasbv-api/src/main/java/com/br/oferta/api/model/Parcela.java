@@ -22,12 +22,20 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  *
  * @author fabio
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "parcela", schema = "oferta")
 public class Parcela implements Serializable {
@@ -79,115 +87,5 @@ public class Parcela implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pagamento_id", foreignKey = @ForeignKey(name = "fk_fatura_pagamento"), nullable = false)
     private Pagamento pagamento;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNumeroFatura() {
-        return numeroFatura;
-    }
-
-    public void setNumeroFatura(String numeroFatura) {
-        this.numeroFatura = numeroFatura;
-    }
-
-    public LocalDate getDataRegistro() {
-        return dataRegistro;
-    }
-
-    public void setDataRegistro(LocalDate dataRegistro) {
-        this.dataRegistro = dataRegistro;
-    }
-
-    public LocalDate getDataEmissao() {
-        return dataEmissao;
-    }
-
-    public void setDataEmissao(LocalDate dataEmissao) {
-        this.dataEmissao = dataEmissao;
-    }
-
-    public LocalDate getDataPagamento() {
-        return dataPagamento;
-    }
-
-    public void setDataPagamento(LocalDate dataPagamento) {
-        this.dataPagamento = dataPagamento;
-    }
-
-    public LocalDate getDataPedidoCancelamento() {
-        return dataPedidoCancelamento;
-    }
-
-    public void setDataPedidoCancelamento(LocalDate dataPedidoCancelamento) {
-        this.dataPedidoCancelamento = dataPedidoCancelamento;
-    }
-
-    public LocalDate getDataCancelamento() {
-        return dataCancelamento;
-    }
-
-    public void setDataCancelamento(LocalDate dataCancelamento) {
-        this.dataCancelamento = dataCancelamento;
-    }
-
-    public BigDecimal getValor() {
-        return valor;
-    }
-
-    public void setValor(BigDecimal valor) {
-        this.valor = valor;
-    }
-
-    public FaturaStatus getFaturaStatus() {
-        return faturaStatus;
-    }
-
-    public void setFaturaStatus(FaturaStatus faturaStatus) {
-        this.faturaStatus = faturaStatus;
-    }
-
-    public Pagamento getPagamento() {
-        return pagamento;
-    }
-
-    public void setPagamento(Pagamento pagamento) {
-        this.pagamento = pagamento;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        Parcela other = (Parcela) obj;
-        if (getId() == null) {
-            if (other.getId() != null) {
-                return false;
-            }
-        } else if (!id.equals(other.id)) {
-            return false;
-        }
-        return true;
-    }
 
 }

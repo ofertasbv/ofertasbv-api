@@ -28,11 +28,19 @@ import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  *
  * @author fabio
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "pagamento", schema = "oferta")
 public class Pagamento implements Serializable {
@@ -75,99 +83,4 @@ public class Pagamento implements Serializable {
     @ManyToOne
     @JoinColumn(name = "pedido_id", nullable = false, foreignKey = @ForeignKey(name = "fk_pagamento_pedido"))
     private Pedido pedido;
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        Pagamento other = (Pagamento) obj;
-        if (getId() == null) {
-            if (other.getId() != null) {
-                return false;
-            }
-        } else if (!id.equals(other.id)) {
-            return false;
-        }
-        return true;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Integer getQuantidade() {
-        return quantidade;
-    }
-
-    public void setQuantidade(Integer quantidade) {
-        this.quantidade = quantidade;
-    }
-
-    public BigDecimal getValor() {
-        return valor;
-    }
-
-    public void setValor(BigDecimal valor) {
-        this.valor = valor;
-    }
-
-    public LocalDateTime getDataPagamento() {
-        return dataPagamento;
-    }
-
-    public void setDataPagamento(LocalDateTime dataPagamento) {
-        this.dataPagamento = dataPagamento;
-    }
-
-    public PagamentoTipo getPagamentoTipo() {
-        return pagamentoTipo;
-    }
-
-    public void setPagamentoTipo(PagamentoTipo pagamentoTipo) {
-        this.pagamentoTipo = pagamentoTipo;
-    }
-
-    public PagamentoForma getPagamentoForma() {
-        return pagamentoForma;
-    }
-
-    public void setPagamentoForma(PagamentoForma pagamentoForma) {
-        this.pagamentoForma = pagamentoForma;
-    }
-
-    public List<Parcela> getParcelas() {
-        return parcelas;
-    }
-
-    public void setParcelas(List<Parcela> parcelas) {
-        this.parcelas = parcelas;
-    }
-
-    public Pedido getPedido() {
-        return pedido;
-    }
-
-    public void setPedido(Pedido pedido) {
-        this.pedido = pedido;
-    }
-
 }

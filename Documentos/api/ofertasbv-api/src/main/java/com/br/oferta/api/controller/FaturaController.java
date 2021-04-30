@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -25,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -59,7 +59,7 @@ public class FaturaController {
 
     @PostMapping("/create")
 //    @PreAuthorize("hasAuthority('ROLE_CADASTRAR_CATEGORIA') and #oauth2.hasScope('write')")
-    public ResponseEntity<Parcela> create(@Valid @RequestBody Parcela fatura, HttpServletResponse response) {
+    public ResponseEntity<Parcela> create(@Validated @RequestBody Parcela fatura, HttpServletResponse response) {
         Parcela faturaSalva = faturaService.create(fatura);
         publisher.publishEvent(new RecursoCriadoEvent(this, response, faturaSalva.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(faturaSalva);
@@ -67,7 +67,7 @@ public class FaturaController {
 
     @PutMapping("/update/{id}")
 //    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA')")
-    public ResponseEntity<Parcela> update(@PathVariable Long id, @Valid @RequestBody Parcela fatura) {
+    public ResponseEntity<Parcela> update(@PathVariable Long id, @Validated @RequestBody Parcela fatura) {
         try {
             Parcela faturaSalva = faturaService.findById(id).get();
             if (faturaSalva == null) {

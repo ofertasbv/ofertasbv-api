@@ -3,7 +3,6 @@ package com.br.oferta.api.controller;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -38,6 +37,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -89,7 +89,7 @@ public class VendedorController {
 
     @PostMapping("/create")
     //@PreAuthorize("hasAuthority('ROLE_CADASTRAR_PESSOA') and #oauth2.hasScope('write')")
-    public ResponseEntity<Vendedor> create(@Valid @RequestBody Vendedor pessoa, HttpServletResponse response) {
+    public ResponseEntity<Vendedor> create(@Validated @RequestBody Vendedor pessoa, HttpServletResponse response) {
         Vendedor pessoaSalva = vendedorService.create(pessoa);
         publisher.publishEvent(new RecursoCriadoEvent(this, response, pessoaSalva.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(pessoaSalva);
@@ -97,7 +97,7 @@ public class VendedorController {
 
     @PutMapping("/update/{id}")
 //    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA')")
-    public ResponseEntity<Vendedor> update(@PathVariable Long id, @Valid @RequestBody Vendedor cliente) {
+    public ResponseEntity<Vendedor> update(@PathVariable Long id, @Validated @RequestBody Vendedor cliente) {
         try {
             Vendedor salvar = vendedorService.findById(id).get();
             if (salvar == null) {

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -24,6 +23,7 @@ import com.br.oferta.api.util.filter.PedidoItemFilter;
 import io.swagger.annotations.Api;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -69,7 +69,7 @@ public class PedidoItemController {
 
     @PostMapping("/create")
 //    @PreAuthorize("hasAuthority('ROLE_CADASTRAR_CATEGORIA') and #oauth2.hasScope('write')")
-    public ResponseEntity<PedidoItem> criar(@Valid @RequestBody PedidoItem pedido, HttpServletResponse response) {
+    public ResponseEntity<PedidoItem> criar(@Validated @RequestBody PedidoItem pedido, HttpServletResponse response) {
         PedidoItem pedidoSalva = pedidoItemService.create(pedido);
         publisher.publishEvent(new RecursoCriadoEvent(this, response, pedidoSalva.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(pedidoSalva);
@@ -77,7 +77,7 @@ public class PedidoItemController {
 
     @PutMapping("/update/{id}")
 //    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA')")
-    public ResponseEntity<PedidoItem> update(@PathVariable Long id, @Valid @RequestBody PedidoItem pedido) {
+    public ResponseEntity<PedidoItem> update(@PathVariable Long id, @Validated @RequestBody PedidoItem pedido) {
         try {
             PedidoItem pedidoSalva = pedidoItemService.findById(id).get();
             if (pedidoSalva == null) {

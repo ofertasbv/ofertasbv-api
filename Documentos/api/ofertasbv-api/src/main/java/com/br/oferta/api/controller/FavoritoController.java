@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -25,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -59,7 +59,7 @@ public class FavoritoController {
 
     @PostMapping("/create")
 //    @PreAuthorize("hasAuthority('ROLE_CADASTRAR_CATEGORIA') and #oauth2.hasScope('write')")
-    public ResponseEntity<Favorito> create(@Valid @RequestBody Favorito favorito, HttpServletResponse response) {
+    public ResponseEntity<Favorito> create(@Validated @RequestBody Favorito favorito, HttpServletResponse response) {
         Favorito salva = favoritoService.create(favorito);
         publisher.publishEvent(new RecursoCriadoEvent(this, response, salva.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(salva);
@@ -67,7 +67,7 @@ public class FavoritoController {
 
     @PutMapping("/update/{id}")
 //    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA')")
-    public ResponseEntity<Favorito> update(@PathVariable Long id, @Valid @RequestBody Favorito favorito) {
+    public ResponseEntity<Favorito> update(@PathVariable Long id, @Validated @RequestBody Favorito favorito) {
         try {
             Favorito salva = favoritoService.findById(id).get();
             if (salva == null) {

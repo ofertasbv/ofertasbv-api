@@ -1,11 +1,9 @@
 package com.br.oferta.api.controller;
 
-import com.br.oferta.api.model.Categoria;
 import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -24,6 +22,7 @@ import com.br.oferta.api.service.PermissaoService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -56,7 +55,7 @@ public class PermissaoController {
 
     @PostMapping("/create")
 //    @PreAuthorize("hasAuthority('ROLE_CADASTRAR_CATEGORIA') and #oauth2.hasScope('write')")
-    public ResponseEntity<Permissao> create(@Valid @RequestBody Permissao permissao, HttpServletResponse response) {
+    public ResponseEntity<Permissao> create(@Validated @RequestBody Permissao permissao, HttpServletResponse response) {
         Permissao salva = permissaoService.create(permissao);
         publisher.publishEvent(new RecursoCriadoEvent(this, response, salva.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(salva);
@@ -64,7 +63,7 @@ public class PermissaoController {
 
     @PutMapping("/update/{id}")
 //    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA')")
-    public ResponseEntity<Permissao> update(@PathVariable Long id, @Valid @RequestBody Permissao permissao) {
+    public ResponseEntity<Permissao> update(@PathVariable Long id, @Validated @RequestBody Permissao permissao) {
         try {
             Permissao salava = permissaoService.findById(id).get();
             if (salava == null) {

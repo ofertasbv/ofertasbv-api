@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -27,6 +26,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -61,7 +61,7 @@ public class ContatoController {
 
     @PostMapping("/create")
 //    @PreAuthorize("hasAuthority('ROLE_CADASTRAR_CATEGORIA') and #oauth2.hasScope('write')")
-    public ResponseEntity<Contato> criar(@Valid @RequestBody Contato contato, HttpServletResponse response) {
+    public ResponseEntity<Contato> criar(@Validated @RequestBody Contato contato, HttpServletResponse response) {
         Contato contatoSalva = contatoRepository.saveAndFlush(contato);
         publisher.publishEvent(new RecursoCriadoEvent(this, response, contatoSalva.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(contatoSalva);
@@ -76,7 +76,7 @@ public class ContatoController {
 
     @PutMapping("/update/{id}")
 //    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA')")
-    public ResponseEntity<Contato> atualizar(@PathVariable Long id, @Valid @RequestBody Contato contato) {
+    public ResponseEntity<Contato> atualizar(@PathVariable Long id, @Validated @RequestBody Contato contato) {
         try {
             Contato contatoSalva = contatoRepository.getOne(id);
             if (contatoSalva == null) {

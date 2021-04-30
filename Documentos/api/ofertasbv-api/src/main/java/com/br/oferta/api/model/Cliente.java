@@ -12,11 +12,17 @@ import javax.persistence.ForeignKey;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  *
  * @author fabio
  */
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "cliente", schema = "oferta")
 @PrimaryKeyJoinColumn(name = "cliente_id", foreignKey = @ForeignKey(name = "fk_cliente"))
@@ -30,21 +36,4 @@ public class Cliente extends Pessoa implements Serializable {
 
     @Column(name = "sexo")
     private String sexo;
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public String getSexo() {
-        return sexo;
-    }
-
-    public void setSexo(String sexo) {
-        this.sexo = sexo;
-    }
-
 }

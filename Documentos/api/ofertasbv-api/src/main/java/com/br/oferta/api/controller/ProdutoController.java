@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -37,6 +36,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -144,7 +144,7 @@ public class ProdutoController {
 
     @PostMapping("/create")
 //    @PreAuthorize("hasAuthority('ROLE_CADASTRAR_CATEGORIA') and #oauth2.hasScope('write')")
-    public ResponseEntity<Produto> create(@Valid @RequestBody Produto produto, HttpServletResponse response) {
+    public ResponseEntity<Produto> create(@Validated @RequestBody Produto produto, HttpServletResponse response) {
         Produto produtoSalva = produtoService.create(produto);
         publisher.publishEvent(new RecursoCriadoEvent(this, response, produtoSalva.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(produtoSalva);
@@ -152,7 +152,7 @@ public class ProdutoController {
 
     @PutMapping("/update/{id}")
 //    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA')")
-    public ResponseEntity<Produto> update(@PathVariable Long id, @Valid @RequestBody Produto produto) {
+    public ResponseEntity<Produto> update(@PathVariable Long id, @Validated @RequestBody Produto produto) {
         try {
             Produto produtoSalva = produtoService.findById(id).get();
             if (produtoSalva == null) {

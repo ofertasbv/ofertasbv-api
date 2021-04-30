@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -26,6 +25,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -72,7 +72,7 @@ public class PedidoController {
 
     @PostMapping("/create")
 //    @PreAuthorize("hasAuthority('ROLE_CADASTRAR_CATEGORIA') and #oauth2.hasScope('write')")
-    public ResponseEntity<Pedido> criar(@Valid @RequestBody Pedido pedido, HttpServletResponse response) {
+    public ResponseEntity<Pedido> criar(@Validated @RequestBody Pedido pedido, HttpServletResponse response) {
         Pedido pedidoSalva = pedidoService.create(pedido);
         publisher.publishEvent(new RecursoCriadoEvent(this, response, pedidoSalva.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(pedidoSalva);
@@ -80,7 +80,7 @@ public class PedidoController {
 
     @PutMapping("/update/{id}")
 //    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA')")
-    public ResponseEntity<Pedido> update(@PathVariable Long id, @Valid @RequestBody Pedido pedido) {
+    public ResponseEntity<Pedido> update(@PathVariable Long id, @Validated @RequestBody Pedido pedido) {
         try {
             Pedido pedidoSalva = pedidoService.findById(id).get();
             if (pedidoSalva == null) {

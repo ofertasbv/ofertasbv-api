@@ -29,11 +29,19 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  *
  * @author fabio
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "pedido")
 public class Pedido implements Serializable {
@@ -128,109 +136,4 @@ public class Pedido implements Serializable {
                 .subtract(Optional.ofNullable(valorDesconto).orElse(BigDecimal.ZERO));
         return total;
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public LocalDate getDataRegistro() {
-        return dataRegistro;
-    }
-
-    public void setDataRegistro(LocalDate dataRegistro) {
-        this.dataRegistro = dataRegistro;
-    }
-
-    public LocalDate getDataEntrega() {
-        return dataEntrega;
-    }
-
-    public void setDataEntrega(LocalDate dataEntrega) {
-        this.dataEntrega = dataEntrega;
-    }
-
-    public BigDecimal getValorFrete() {
-        return valorFrete;
-    }
-
-    public void setValorFrete(BigDecimal valorFrete) {
-        this.valorFrete = valorFrete;
-    }
-
-    public BigDecimal getValorDesconto() {
-        return valorDesconto;
-    }
-
-    public void setValorDesconto(BigDecimal valorDesconto) {
-        this.valorDesconto = valorDesconto;
-    }
-
-    public BigDecimal getValorInicial() {
-        return valorInicial;
-    }
-
-    public void setValorInicial(BigDecimal valorInicial) {
-        this.valorInicial = valorInicial;
-    }
-
-    public BigDecimal getValorTotal() {
-        return valorTotal;
-    }
-
-    public void setValorTotal(BigDecimal valorTotal) {
-        this.valorTotal = valorTotal;
-    }
-
-    public List<PedidoItem> getPedidoItems() {
-        return pedidoItems;
-    }
-
-    public void setPedidoItems(List<PedidoItem> pedidoItems) {
-        this.pedidoItems = pedidoItems;
-    }
-
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
-
-    public Loja getLoja() {
-        return loja;
-    }
-
-    public void setLoja(Loja loja) {
-        this.loja = loja;
-    }
-
-    public PedidoStatus getPedidoStatus() {
-        return pedidoStatus;
-    }
-
-    public void setPedidoStatus(PedidoStatus pedidoStatus) {
-        this.pedidoStatus = pedidoStatus;
-    }
-
-    public List<Pagamento> getPagamentos() {
-        return pagamentos;
-    }
-
-    public void setPagamentos(List<Pagamento> pagamentos) {
-        this.pagamentos = pagamentos;
-    }
-
 }

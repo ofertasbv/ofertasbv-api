@@ -1,10 +1,8 @@
 package com.br.oferta.api.controller;
 
-import com.br.oferta.api.model.Cliente;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -39,6 +37,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -84,7 +83,7 @@ public class LojaController {
     @CrossOrigin(maxAge = 10, allowCredentials = "false")
     @PostMapping("/create")//, consumes = MediaType.APPLICATION_JSON_VALUE)
     //@PreAuthorize("hasAuthority('ROLE_CADASTRAR_PESSOA') and #oauth2.hasScope('write')")
-    public ResponseEntity<Loja> create(@Valid @RequestBody Loja pessoa, HttpServletResponse response) {
+    public ResponseEntity<Loja> create(@Validated @RequestBody Loja pessoa, HttpServletResponse response) {
         Loja pessoaSalva = lojaService.create(pessoa);
         publisher.publishEvent(new RecursoCriadoEvent(this, response, pessoaSalva.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(pessoaSalva);
@@ -92,7 +91,7 @@ public class LojaController {
 
     @PutMapping("/update/{id}")
 //    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA')")
-    public ResponseEntity<Loja> update(@PathVariable Long id, @Valid @RequestBody Loja loja) {
+    public ResponseEntity<Loja> update(@PathVariable Long id, @Validated @RequestBody Loja loja) {
         try {
             Loja salvar = lojaService.findById(id).get();
             if (salvar == null) {

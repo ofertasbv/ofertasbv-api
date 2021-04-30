@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -35,6 +34,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -88,7 +88,7 @@ public class PromocaoController {
 
     @PostMapping("/create")
 //    @PreAuthorize("hasAuthority('ROLE_CADASTRAR_CATEGORIA') and #oauth2.hasScope('write')")
-    public ResponseEntity<Promocao> criar(@Valid @RequestBody Promocao promocao, HttpServletResponse response) {
+    public ResponseEntity<Promocao> criar(@Validated @RequestBody Promocao promocao, HttpServletResponse response) {
         Promocao promocaoSalva = promocaoService.create(promocao);
         publisher.publishEvent(new RecursoCriadoEvent(this, response, promocaoSalva.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(promocaoSalva);
@@ -110,7 +110,7 @@ public class PromocaoController {
 
     @PutMapping("/update/{id}")
 //    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA')")
-    public ResponseEntity<Promocao> atualizar(@PathVariable Long id, @Valid @RequestBody Promocao promocao) {
+    public ResponseEntity<Promocao> atualizar(@PathVariable Long id, @Validated @RequestBody Promocao promocao) {
         try {
             Promocao promocaoSalva = promocaoService.findById(id).get();
             if (promocaoSalva == null) {

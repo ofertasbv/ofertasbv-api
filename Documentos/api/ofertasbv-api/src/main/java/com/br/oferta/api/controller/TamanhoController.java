@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -25,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -60,7 +60,7 @@ public class TamanhoController {
 
     @PostMapping("/create")
 //    @PreAuthorize("hasAuthority('ROLE_CADASTRAR_CATEGORIA') and #oauth2.hasScope('write')")
-    public ResponseEntity<Tamanho> create(@Valid @RequestBody Tamanho tamanho, HttpServletResponse response) {
+    public ResponseEntity<Tamanho> create(@Validated @RequestBody Tamanho tamanho, HttpServletResponse response) {
         Tamanho salva = tamanhoService.create(tamanho);
         publisher.publishEvent(new RecursoCriadoEvent(this, response, salva.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(salva);
@@ -68,7 +68,7 @@ public class TamanhoController {
 
     @PutMapping("/update/{id}")
 //    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA')")
-    public ResponseEntity<Tamanho> update(@PathVariable Long id, @Valid @RequestBody Tamanho tamanho) {
+    public ResponseEntity<Tamanho> update(@PathVariable Long id, @Validated @RequestBody Tamanho tamanho) {
         try {
             Tamanho salva = tamanhoService.findById(id).get();
             if (salva == null) {

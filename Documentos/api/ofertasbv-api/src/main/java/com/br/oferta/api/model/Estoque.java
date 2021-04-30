@@ -25,11 +25,19 @@ import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  *
  * @author fabio
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "estoque", schema = "oferta")
 public class Estoque implements Serializable {
@@ -41,9 +49,13 @@ public class Estoque implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @NotNull(message = "A data de registro é obrigatório")
-    @Column(name = "data_registro", nullable = true)
-    private LocalDate dataRegistro;
+    @NotNull(message = "A data de entrada é obrigatório")
+    @Column(name = "data_entrada", nullable = true)
+    private LocalDate dataEntrada;
+
+    @NotNull(message = "A data de saida é obrigatório")
+    @Column(name = "data_saida", nullable = true)
+    private LocalDate dataSaida;
 
     @Column(name = "data_fabricacao")
     private LocalDate dataFabricacao;
@@ -51,27 +63,37 @@ public class Estoque implements Serializable {
     @Column(name = "data_vencimento")
     private LocalDate dataVencimento;
 
-    @NotNull(message = "A quantidade em estoque é obrigatória")
-    @Max(value = 9999, message = "A quantidade em estoque deve ser menor que 9.999")
-    @Column(name = "quantidade", nullable = false)
-    private Integer quantidade;
+    @NotNull(message = "A quantidade de entrada em estoque é obrigatória")
+    @Max(value = 9999, message = "A quantidade de entrada em estoque deve ser menor que 9.999")
+    @Column(name = "quantidade_entrada", nullable = false)
+    private Integer quantidadeEntrada;
+
+    @NotNull(message = "A quantidade de saida em estoque é obrigatória")
+    @Max(value = 9999, message = "A quantidade de saida em estoque deve ser menor que 9.999")
+    @Column(name = "quantidade_saida", nullable = false)
+    private Integer quantidadeSaida;
+
+    @NotNull(message = "A quantidade total do estoque é obrigatória")
+    @Max(value = 9999, message = "A quantidade total do estoque deve ser menor que 9.999")
+    @Column(name = "quantidade_total", nullable = false)
+    private Integer quantidadeTotal;
 
     @NotNull(message = "Valor unitário é obrigatório")
-    @DecimalMin(value = "0.50", message = "O valor unitár do produto deve ser maior que R$0,00")
-    @DecimalMax(value = "9999999.99", message = "O valor do produto deve ser menor que R$9.999.999,99")
-    @Column(name = "valor_unitario", nullable = false)
-    private BigDecimal valorUnitario;
+    @DecimalMin(value = "0.50", message = "O valor de entrada do estoque deve ser maior que R$0,00")
+    @DecimalMax(value = "9999999.99", message = "O valor do entrada do estoque deve ser menor que R$9.999.999,99")
+    @Column(name = "valor_entrada", nullable = false)
+    private BigDecimal valorEntrada;
+
+    @NotNull(message = "Valor de saida é obrigatório")
+    @DecimalMin(value = "0.50", message = "O valor de saida do produto deve ser maior que R$0,00")
+    @DecimalMax(value = "9999999.99", message = "O valor de venda do produto deve ser menor que R$9.999.999,99")
+    @Column(name = "valor_saida", nullable = false)
+    private BigDecimal valorSaida;
 
     @NotNull(message = "O percentual de ganho é obrigatório")
     @DecimalMax(value = "100.0", message = "O valor do percentual de ganho deve ser menor que 100")
     @Column(name = "percetual", nullable = false)
     private BigDecimal percentual;
-
-    @NotNull(message = "Valor de venda é obrigatório")
-    @DecimalMin(value = "0.50", message = "O valor de venda do produto deve ser maior que R$0,00")
-    @DecimalMax(value = "9999999.99", message = "O valor de venda do produto deve ser menor que R$9.999.999,99")
-    @Column(name = "valor_venda", nullable = false)
-    private BigDecimal valorVenda;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "estoque_status", nullable = true)
@@ -82,12 +104,12 @@ public class Estoque implements Serializable {
     private Produto produto;
 
     public BigDecimal calcularValorTotal() {
-        BigDecimal valorTotal = valorUnitario.add(percentual.divide(new BigDecimal(100)).multiply(valorUnitario));
+        BigDecimal valorTotal = getValorEntrada().add(getPercentual().divide(new BigDecimal(100)).multiply(getValorEntrada()));
         return valorTotal;
     }
 
     public BigDecimal calcularValorTotalPromocao() {
-        BigDecimal valorTotal = valorVenda.subtract(produto.getPromocao().getDesconto().divide(new BigDecimal(100)).multiply(valorVenda));
+        BigDecimal valorTotal = getValorSaida().subtract(getProduto().getPromocao().getDesconto().divide(new BigDecimal(100)).multiply(getValorSaida()));
         return valorTotal;
     }
 
@@ -95,113 +117,6 @@ public class Estoque implements Serializable {
         Locale locale = new Locale("pt", "Brasil");
         NumberFormat format = NumberFormat.getInstance(locale);
         DecimalFormat resultado = new DecimalFormat();
-        return valorUnitario;
+        return getValorEntrada();
     }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        Estoque other = (Estoque) obj;
-        if (getId() == null) {
-            if (other.getId() != null) {
-                return false;
-            }
-        } else if (!id.equals(other.id)) {
-            return false;
-        }
-        return true;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public LocalDate getDataRegistro() {
-        return dataRegistro;
-    }
-
-    public void setDataRegistro(LocalDate dataRegistro) {
-        this.dataRegistro = dataRegistro;
-    }
-
-    public LocalDate getDataFabricacao() {
-        return dataFabricacao;
-    }
-
-    public void setDataFabricacao(LocalDate dataFabricacao) {
-        this.dataFabricacao = dataFabricacao;
-    }
-
-    public LocalDate getDataVencimento() {
-        return dataVencimento;
-    }
-
-    public void setDataVencimento(LocalDate dataVencimento) {
-        this.dataVencimento = dataVencimento;
-    }
-
-    public Integer getQuantidade() {
-        return quantidade;
-    }
-
-    public void setQuantidade(Integer quantidade) {
-        this.quantidade = quantidade;
-    }
-
-    public void setValorUnitario(BigDecimal valorUnitario) {
-        this.valorUnitario = valorUnitario;
-    }
-
-    public BigDecimal getPercentual() {
-        return percentual;
-    }
-
-    public void setPercentual(BigDecimal percentual) {
-        this.percentual = percentual;
-    }
-
-    public BigDecimal getValorVenda() {
-        return valorVenda;
-    }
-
-    public void setValorVenda(BigDecimal valorVenda) {
-        this.valorVenda = valorVenda;
-    }
-
-    public EstoqueStatus getEstoqueStatus() {
-        return estoqueStatus;
-    }
-
-    public void setEstoqueStatus(EstoqueStatus estoqueStatus) {
-        this.estoqueStatus = estoqueStatus;
-    }
-
-    public Produto getProduto() {
-        return produto;
-    }
-
-    public void setProduto(Produto produto) {
-        this.produto = produto;
-    }
-
 }

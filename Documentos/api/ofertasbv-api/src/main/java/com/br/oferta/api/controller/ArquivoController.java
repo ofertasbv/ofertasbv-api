@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -20,13 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.br.oferta.api.util.event.RecursoCriadoEvent;
 import com.br.oferta.api.model.Arquivo;
 import com.br.oferta.api.service.ArquivoService;
-import com.br.oferta.api.util.teste.TesteUUID;
 import com.br.oferta.api.util.upload.FileStorageService;
 import com.br.oferta.api.util.upload.payload.UploadFileResponse;
 import io.swagger.annotations.Api;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -36,6 +33,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -76,7 +74,7 @@ public class ArquivoController {
 
     @PostMapping("/create")
 //    @PreAuthorize("hasAuthority('ROLE_CADASTRAR_CATEGORIA') and #oauth2.hasScope('write')")
-    public ResponseEntity<Arquivo> create(@Valid @RequestBody Arquivo arquivo, HttpServletResponse response) {
+    public ResponseEntity<Arquivo> create(@Validated @RequestBody Arquivo arquivo, HttpServletResponse response) {
         Arquivo arquivoSalva = arquivoService.create(arquivo);
         publisher.publishEvent(new RecursoCriadoEvent(this, response, arquivoSalva.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(arquivoSalva);
@@ -84,7 +82,7 @@ public class ArquivoController {
 
     @PutMapping("/update/{id}")
 //    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA')")
-    public ResponseEntity<Arquivo> update(@PathVariable Long id, @Valid @RequestBody Arquivo arquivo) {
+    public ResponseEntity<Arquivo> update(@PathVariable Long id, @Validated @RequestBody Arquivo arquivo) {
         try {
             Arquivo arquivoSalva = arquivoService.findById(id).get();
             if (arquivoSalva == null) {

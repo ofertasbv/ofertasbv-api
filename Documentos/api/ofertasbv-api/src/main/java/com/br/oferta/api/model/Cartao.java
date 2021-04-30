@@ -13,7 +13,15 @@ import javax.persistence.Id;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "cartao", schema = "oferta")
 @PrimaryKeyJoinColumn(name = "cartao_id", foreignKey = @ForeignKey(name = "fk_cartao"))
@@ -52,91 +60,5 @@ public class Cartao implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "cartao_tipo", nullable = false)
     private CartaoTipo cartaoTipo = CartaoTipo.DEBITO;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getNumeroCartao() {
-        return numeroCartao;
-    }
-
-    public void setNumeroCartao(String numeroCartao) {
-        this.numeroCartao = numeroCartao;
-    }
-
-    public String getNumeroSeguranca() {
-        return numeroSeguranca;
-    }
-
-    public void setNumeroSeguranca(String numeroSeguranca) {
-        this.numeroSeguranca = numeroSeguranca;
-    }
-
-    public LocalDate getDataValidade() {
-        return dataValidade;
-    }
-
-    public void setDataValidade(LocalDate dataValidade) {
-        this.dataValidade = dataValidade;
-    }
-
-    public CartaoEmissor getCartaoEmissor() {
-        return cartaoEmissor;
-    }
-
-    public void setCartaoEmissor(CartaoEmissor cartaoEmissor) {
-        this.cartaoEmissor = cartaoEmissor;
-    }
-
-    public CartaoTipo getCartaoTipo() {
-        return cartaoTipo;
-    }
-
-    public void setCartaoTipo(CartaoTipo cartaoTipo) {
-        this.cartaoTipo = cartaoTipo;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        Cartao other = (Cartao) obj;
-        if (getId() == null) {
-            if (other.getId() != null) {
-                return false;
-            }
-        } else if (!id.equals(other.id)) {
-            return false;
-        }
-        return true;
-    }
 
 }
