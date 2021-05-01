@@ -28,7 +28,7 @@ public class Tamanho implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @NotBlank(message = "Descricao é obrigatório")
-    @Column(name = "descricao")
-    private String descricao;
+    @NotBlank(message = "Nome é obrigatório")
+    @Column(name = "nome")
+    private String nome;
 }

@@ -48,10 +48,10 @@ public class SwaggerConfig {
     private ApiInfo metaInfo() {
 
         ApiInfo apiInfo = new ApiInfo(
-                "OFERTABV API REST",
+                "BOOKOFERTA API REST",
                 "API REST E-COMMERCE",
                 "1.0",
-                "Terms of Service",
+                "Termos de Serviço",
                 new Contact("Fabio Resplandes", "https://www.youtube.com/michellibrito",
                         "projetogdados@gmail.com"),
                 "Apache License Version 2.0",

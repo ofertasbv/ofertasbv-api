@@ -9,6 +9,7 @@ import com.br.oferta.api.model.Seguimento;
 import com.br.oferta.api.repository.SeguimentoRepository;
 import com.br.oferta.api.service.serviceImpl.SeguimentoServiceImpl;
 import com.br.oferta.api.util.error.ServiceNotFoundExeception;
+import com.br.oferta.api.util.exception.NomeSeguimentoJaCadastradoException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -78,6 +79,11 @@ public class SeguimentoService implements SeguimentoServiceImpl {
 
     @Override
     public Seguimento create(Seguimento c) {
+        Optional<Seguimento> optional = seguimentoRepository.findByNomeIgnoreCase(c.getNome());
+        if (optional.isPresent()) {
+            throw new NomeSeguimentoJaCadastradoException("Nome do seguimento já cadastrado");
+        }
+
         return seguimentoRepository.save(c);
     }
 
